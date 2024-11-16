@@ -102,6 +102,7 @@ architecture TestBench of TransmitterTestBench is
     signal dataOut: std_logic_vector(7 downto 0);
     signal newDataEn: std_logic;
     signal frameEndEn: std_logic;
+    signal hexDebug: std_logic_vector(15 downto 0);
     
     -- Functions
     function nibble_to_text(nibble: std_logic_vector(3 downto 0)) return character is
@@ -253,7 +254,7 @@ architecture TestBench of TransmitterTestBench is
         end loop;
         wait until tx_complete = ACTIVE;
         wait until rising_edge(clock);
-        wait for 100 ns;
+        wait for 10000 ns;
         
         report "Sending over VPE";
         wait until rising_edge(clock);
@@ -288,7 +289,8 @@ begin
         vpeRx => '0',
         sendToVpeEn => sendToVpeEn,
         sendToUartEn => '0',
-        vpeTx => vpeTx
+        vpeTx => vpeTx,
+        sevenSegmentHex => hexDebug
     );
     
     TRANSMITTER: UartTx port map(
@@ -312,7 +314,7 @@ begin
     );
     
     DRIVE_TRANSMITTER: process
-        constant MICROSECOND: integer := 100;
+        constant MICROSECOND: integer := 1000;
     begin
         sendToVpeEn <= not ACTIVE;
         send_data(100 * MICROSECOND, 10, clock, reset, txComplete, frameEndEn, dataIn, sendToVpeEn, txEn);

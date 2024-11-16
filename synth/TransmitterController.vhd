@@ -33,7 +33,8 @@ use IEEE.NUMERIC_STD.ALL;
 
 entity TransmitterController is
     generic (
-        BUFFER_SIZE: integer := 200000
+        BUFFER_SIZE: integer := 200000;
+        CLOCK_FREQUENCY: integer := 100_000_000
     );
     Port ( clock : in STD_LOGIC;
            reset : in STD_LOGIC;
@@ -98,11 +99,40 @@ architecture Behavioral of TransmitterController is
         LOAD_COUNT,
         READ_DATA_DELAY,
         READ_DATA,
-        INCREMENT_ADDRESS
+        INCREMENT_ADDRESS,
+        DELAY_TX_START,
+        TRANSMIT_HEADER,
+        WAIT_HEADER_END_A,
+        WAIT_HEADER_END_B,
+        READ_FIRST_BYTE,
+        TRANSMIT_BODY
     );
     
     -- CONSTANTS
     constant ACTIVE: std_logic := '1';
+    constant HEADER_T0_CLOCKS: integer := CLOCK_FREQUENCY / 10000;
+    constant DATA_SELECT_HEADER: std_logic := not ACTIVE;
+    constant DATA_SELECT_READ: std_logic := ACTIVE;
+    
+    -- FUNCTIONS
+    function nanosecondToClockRatio return integer is
+    begin
+        if CLOCK_FREQUENCY < 1_000_000_000 then
+            return 1_000_000_000/CLOCK_FREQUENCY;
+        else
+            return CLOCK_FREQUENCY/1_000_000_000;
+        end if;
+    end function;
+    
+    function nanosecondsToClocks(nanoseconds: integer) return integer is
+        constant ratio: integer := nanosecondToClockRatio;
+    begin
+        if CLOCK_FREQUENCY < 1_000_000_000 then
+            return nanoseconds / ratio;
+        else
+            return nanoseconds * ratio;
+        end if;
+    end function;
     
     -- SIGNALS
     
@@ -130,8 +160,36 @@ architecture Behavioral of TransmitterController is
     signal addressIncrementEn: std_logic;
     signal addressTerminalMode: std_logic;
     
+    -- [T0 GENERATOR]
+    signal loadDataTimebaseEn: std_logic;
+    signal loadHeaderTimebaseEn: std_logic;
+    signal t0En: std_logic;
+    
+    -- [HEADER GENERATOR]
+    signal headerLoadEn: std_logic;
+    signal headerNextEn: std_logic;
+    signal headerCompleteMode: std_logic;
+    signal headerData: std_logic_vector(7 downto 0);
+    
+    -- [DATA LATCH]
+    signal readEn: std_logic;
+    signal readData: std_logic_vector(7 downto 0) := (others => '0');
+    
+    -- [TX]
+    signal dataSelect: std_logic;
+    signal txData: std_logic_vector(7 downto 0);
+    signal txMode: std_logic;
+    signal vpeSerial: std_logic;
+    signal wordEndEn: std_logic;
+    
+    -- [PULSE END DETECTOR]
+    signal pulseEndedEn: std_logic;
+    
 begin
-    UART_RECEIVER: UartRx port map(
+    UART_RECEIVER: UartRx 
+    generic map(
+        CLOCK_FREQ => CLOCK_FREQUENCY
+    ) port map(
         clock => clock,
         reset => reset,
         rxData => uartRxLine,
@@ -141,8 +199,8 @@ begin
     
     -- TIME BASE REGISTER
     TIMEBASE_REGISTER: process(clock, reset)
-        variable timebase: unsigned(31 downto 0);
-        variable timebase_length: unsigned(7 downto 0);
+        variable timebase: unsigned(31 downto 0) := (others => '0');
+        variable timebase_length: unsigned(7 downto 0) := (others => '0');
     begin
         if (reset = ACTIVE) then
             timebase := (others => '0');
@@ -170,8 +228,8 @@ begin
     
     -- COUNT REGISTER
     COUNT_REGISTER: process(clock, reset)
-        variable count_var: unsigned(31 downto 0);
-        variable count_length: unsigned(7 downto 0);
+        variable count_var: unsigned(31 downto 0) := (others => '0');
+        variable count_length: unsigned(7 downto 0) := (others => '0');
     begin
         if (reset = ACTIVE) then
             count_var := (others => '0');
@@ -202,7 +260,7 @@ begin
     
     -- ADDRESS INCREMENTER
     ADDRESS_INCREMENTER: process(clock, reset)
-        variable current_address: integer range 0 to BUFFER_SIZE-1;
+        variable current_address: integer range 0 to BUFFER_SIZE-1 := 0;
     begin
         if (reset = ACTIVE) then
             current_address := 0;
@@ -230,30 +288,132 @@ begin
     end process;
     
     -- TO GENERATOR
-    
     T0_GENERATOR: process(clock, reset)
-        variable currentCount: integer;
-        variable terminalCount: integer;
+        variable currentCount: integer := 0;
+        variable terminalCount: integer := HEADER_T0_CLOCKS-1;
     begin
         if (reset = ACTIVE) then
             currentCount := 0;
-            
+            terminalCount := HEADER_T0_CLOCKS-1;
         elsif (rising_edge(clock)) then
+            t0En <= not ACTIVE;
+            if loadDataTimebaseEn = ACTIVE then
+                currentCount := 0;
+                terminalCount := nanosecondsToClocks(timebaseNs)-1;
+            elsif loadHeaderTimebaseEn = ACTIVE then
+                currentCount := 0;
+                terminalCount := HEADER_T0_CLOCKS-1;
+            elsif currentCount = terminalCount then
+                currentCount := 0;
+                t0En <= ACTIVE;
+            else
+                currentCount := currentCount + 1;
+            end if;
         end if;
     end process;
+    
+    -- HEADER GENERATOR
+    HEADER_GENERATOR: process(clock, reset)
+        variable index: integer range 0 to 9 := 0;
+        variable timebaseVector: std_logic_vector(31 downto 0);
+        variable countVector: std_logic_vector(31 downto 0);
+        
+    begin
+        if (reset = ACTIVE) then
+            index := 0;
+        elsif (rising_edge(clock)) then
+            headerCompleteMode <= not ACTIVE;
+            timebaseVector := std_logic_vector(to_unsigned(timebaseNs,32));
+            countVector := std_logic_vector(to_unsigned(count,32));
+            if headerLoadEn = ACTIVE then
+                index := 0;
+            elsif headerNextEn = ACTIVE and index < 9  then
+                index := index + 1;
+            end if;
+            case index is
+                when 0 | 5 =>
+                    headerData <= X"04"; -- length of the time base/count
+                when 1 =>
+                    headerData <= timebaseVector(31 downto 24);
+                when 2 =>
+                    headerData <= timebaseVector(23 downto 16);
+                when 3 =>
+                    headerData <= timebaseVector(15 downto 8);
+                when 4 =>
+                    headerData <= timebaseVector(7 downto 0);
+                when 6 =>
+                    headerData <= countVector(31 downto 24);
+                when 7 =>
+                    headerData <= countVector(23 downto 16);
+                when 8 =>
+                    headerData <= countVector(15 downto 8);
+                when 9 =>
+                    headerData <= countVector(7 downto 0);
+                    headerCompleteMode <= ACTIVE;
+                
+            end case;
+        end if;
+    end process;
+    
+    -- READ LATCH
+    READ_LATCH: process(clock, reset)
+    begin
+        if (reset = ACTIVE) then
+            readData <= (others => '0');
+        elsif (rising_edge(clock)) then
+            if readEn = ACTIVE then
+                readData <= data;
+            end if;
+        end if;
+    end process;
+    
+    -- TX DATA SELECT
+    with dataSelect select
+        txData <= headerData when DATA_SELECT_HEADER,
+                  readData when DATA_SELECT_READ,
+                  headerData when others;
+    
+    -- PULSE END DETECTOR
+    PULSE_END_DETECTOR: process(clock, reset)
+        variable lastSerial: std_logic := not ACTIVE;
+    begin
+        if (reset = ACTIVE) then
+            lastSerial := not ACTIVE;
+        elsif (rising_edge(clock)) then
+            pulseEndedEn <= not ACTIVE;
+            if vpeSerial = not ACTIVE and lastSerial = ACTIVE then
+                pulseEndedEn <= ACTIVE;
+            end if;
+            lastSerial := vpeSerial;
+        end if;
+    end process;
+    
+    -- TRANSMITTER
+    TX: VpeTransmitter
+        generic map(
+            NIBBLE_COUNT => 2
+        )
+        port map(
+            t0En => t0En,
+            data => txData,
+            txMode => txMode,
+            clock => clock,
+            reset => reset,
+            vpeSerial => vpeSerial,
+            wordEndEn => wordEndEn
+        );
+    
+    -- MAP SERIAL TO TX
+    vpeTxLine <= vpeSerial;
+    
+    -- MAP UART DATA TO WRITE
+    writeData <= uartData;
     
     -- CONTROL STATE MACHINE
     CONTROL: process(clock, reset)
     begin
         if (reset = ACTIVE) then
             state <= IDLE;
-            shiftInTimebaseEn <= not ACTIVE;
-            loadTimeBaseLengthEn <= not ACTIVE;
-            shiftInCountEn <= not ACTIVE;
-            loadCountLengthEn <= not ACTIVE;
-            addressClearEn <= not ACTIVE;
-            writeEn <= not ACTIVE;
-            addressIncrementEn <= not ACTIVE;
         elsif (rising_edge(clock)) then
             shiftInTimebaseEn <= not ACTIVE;
             loadTimeBaseLengthEn <= not ACTIVE;
@@ -262,13 +422,29 @@ begin
             addressClearEn <= not ACTIVE;
             writeEn <= not ACTIVE;
             addressIncrementEn <= not ACTIVE;
+            loadHeaderTimebaseEn <= not ACTIVE;
+            headerLoadEn <= not ACTIVE;
+            txMode <= not ACTIVE;
+            headerNextEn <= not ACTIVE;
+            loadDataTimebaseEn <= not ACTIVE;
+            readEn <= not ACTIVE;
+            dataSelect <= DATA_SELECT_HEADER;
+            
+            sevenSegmentHex(15 downto 12) <= X"F";
+            
             case state is
                 when IDLE =>
                     if dataReady = ACTIVE then
                         loadTimeBaseLengthEn <= ACTIVE;
                         state <= LOAD_TIMEBASE;
+                    elsif sendToVpeEn = ACTIVE then
+                        addressClearEn <= ACTIVE;
+                        loadHeaderTimebaseEn <= ACTIVE;
+                        headerLoadEn <= ACTIVE;
+                        state <= DELAY_TX_START;
                     end if;
                     sevenSegmentHex(15 downto 12) <= X"0";
+                    
                 when LOAD_TIMEBASE =>
                     if dataReady = ACTIVE then
                         if timebaseLoadedMode = ACTIVE then
@@ -279,9 +455,11 @@ begin
                         end if;
                     end if;
                     sevenSegmentHex(15 downto 12) <= X"1";
+                    
                 when LOAD_COUNT_DELAY =>
                     state <= LOAD_COUNT;
                     sevenSegmentHex(15 downto 12) <= X"2";
+                    
                 when LOAD_COUNT =>
                     if countLoadedMode = ACTIVE then
                         addressClearEn <= ACTIVE;
@@ -290,9 +468,11 @@ begin
                         shiftInCountEn <= ACTIVE;
                     end if;
                     sevenSegmentHex(15 downto 12) <= X"3";
+                    
                 when READ_DATA_DELAY =>
                     state <= READ_DATA;
                     sevenSegmentHex(15 downto 12) <= X"4";
+                    
                 when READ_DATA =>
                     if addressTerminalMode = ACTIVE then
                         state <= IDLE;
@@ -301,10 +481,60 @@ begin
                         state <= INCREMENT_ADDRESS;
                     end if;
                     sevenSegmentHex(15 downto 12) <= X"5";
+                    
                 when INCREMENT_ADDRESS =>
                     addressIncrementEn <= ACTIVE;
                     state <= READ_DATA;
                     sevenSegmentHex(15 downto 12) <= X"6";
+                
+                when DELAY_TX_START =>
+                    state <= TRANSMIT_HEADER;
+                    sevenSegmentHex(15 downto 12) <= X"7";
+                
+                when TRANSMIT_HEADER =>
+                    txMode <= ACTIVE;
+                    if wordEndEn = ACTIVE then
+                        if headerCompleteMode = ACTIVE then
+                            txMode <= not ACTIVE;
+                            state <= WAIT_HEADER_END_A;
+                        else
+                            headerNextEn <= ACTIVE;
+                        end if;
+                    end if;
+                    sevenSegmentHex(15 downto 12) <= X"8";
+                
+                when WAIT_HEADER_END_A =>
+                    if pulseEndedEn = ACTIVE then
+                        state <= WAIT_HEADER_END_B;
+                    end if;
+                    sevenSegmentHex(15 downto 12) <= X"9";
+                
+                when WAIT_HEADER_END_B =>
+                    if pulseEndedEn = ACTIVE then
+                        loadDataTimebaseEn <= ACTIVE;
+                        state <= READ_FIRST_BYTE;
+                    end if;
+                    sevenSegmentHex(15 downto 12) <= X"A";
+                    
+                when READ_FIRST_BYTE =>
+                    readEn <= ACTIVE;
+                    addressIncrementEn <= ACTIVE;
+                    state <= TRANSMIT_BODY;
+                    sevenSegmentHex(15 downto 12) <= X"B";
+                
+                when TRANSMIT_BODY =>
+                    dataSelect <= DATA_SELECT_READ;
+                    txMode <= ACTIVE;
+                    if wordEndEn = ACTIVE then
+                        if addressTerminalMode = ACTIVE then
+                            txMode <= not ACTIVE;
+                            state <= IDLE;
+                        else
+                            readEn <= ACTIVE;
+                            addressIncrementEn <= ACTIVE;
+                        end if;
+                    end if;
+                    sevenSegmentHex(15 downto 12) <= X"C";
             end case;
         end if;
     end process;

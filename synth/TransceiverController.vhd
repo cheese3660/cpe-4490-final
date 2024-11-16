@@ -34,7 +34,8 @@ use IEEE.STD_LOGIC_1164.ALL;
 entity TransceiverController is
     generic (
         BUFFER_SIZE: integer := 200000;
-        SEPARATE_BUFFERS: boolean := false
+        SEPARATE_BUFFERS: boolean := false;
+        CLOCK_FREQUENCY: integer := 100_000_000
     );
     Port ( clock : in STD_LOGIC;
            reset : in STD_LOGIC;
@@ -52,8 +53,7 @@ architecture Structural of TransceiverController is
         generic (
             BUFFER_SIZE: integer := 200000;
             DATA_SIZE: integer := 8;
-            SEPARATE_BUFFERS: boolean := false;
-            CLOCK_FREQUENCY: integer := 100_000_000;
+            SEPARATE_BUFFERS: boolean := false
         );
         port(
             reset: in std_logic;
@@ -72,7 +72,8 @@ architecture Structural of TransceiverController is
     
     component ReceiverController
         generic (
-            BUFFER_SIZE: integer := 200000
+            BUFFER_SIZE: integer := 200000;
+            CLOCK_FREQUENCY: integer := 100_000_000
         );
         Port ( clock : in STD_LOGIC;
                reset : in STD_LOGIC;
@@ -88,7 +89,8 @@ architecture Structural of TransceiverController is
     
     component TransmitterController
         generic (
-            BUFFER_SIZE: integer := 200000
+            BUFFER_SIZE: integer := 200000;
+            CLOCK_FREQUENCY: integer := 100_000_000
         );
         Port ( clock : in STD_LOGIC;
                reset : in STD_LOGIC;
@@ -145,7 +147,8 @@ begin
     --);
     
     TX: TransmitterController generic map (
-        BUFFER_SIZE => BUFFER_SIZE
+        BUFFER_SIZE => BUFFER_SIZE,
+        CLOCK_FREQUENCY => CLOCK_FREQUENCY
     ) port map(
         reset => reset,
         clock => clock,

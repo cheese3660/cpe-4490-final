@@ -33,7 +33,8 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 entity ReceiverController is
     generic (
-        BUFFER_SIZE: integer := 200000
+        BUFFER_SIZE: integer := 200000;
+        CLOCK_FREQUENCY: integer := 100_000_000;
     );
     Port ( clock : in STD_LOGIC;
            reset : in STD_LOGIC;

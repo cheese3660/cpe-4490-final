@@ -22,7 +22,8 @@ architecture Wrapper of Basys3Wrapper is
     component TransceiverController is
         generic (
             BUFFER_SIZE: integer := 200000;
-            SEPARATE_BUFFERS: boolean := false
+            SEPARATE_BUFFERS: boolean := false;
+            CLOCK_FREQUENCY: integer := 100_000_000
         );
         Port ( clock : in STD_LOGIC;
                reset : in STD_LOGIC;
