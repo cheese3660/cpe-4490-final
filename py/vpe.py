@@ -63,7 +63,7 @@ class VpeSerialAdapter:
         count_bytes = self.port.read(count_length)
         if len(count_bytes) != count_length:
             raise TimeoutError()
-        count = bytes_to_int(count_length)
+        count = bytes_to_int(count_bytes)
         print(f"receiving {count} bytes (transmission took {time} ns)")
         data = self.port.read(count)
         if len(data) != count:

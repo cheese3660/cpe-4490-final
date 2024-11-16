@@ -81,7 +81,7 @@ def receive_file_subprogram():
     port = vpe.VpeSerialAdapter(args.port)
     report = port.receive()
     data = report.receiveData
-    print(f"received {len(data)} in {report.receiveTime} ns ({int(len(data) / (report.receiveTime / 1000000))} b/s)")
+    print(f"received {len(data)} in bytes {report.receiveTime} ns ({int(len(data) / (report.receiveTime / 1_000_000_000.0))} B/s)")
 
     f = open(args.file, "wb")
     f.write(data)
@@ -97,7 +97,7 @@ def round_trip_subprogram():
     port.send(d, int(args.timebase))
     report = port.receive()
     data = report.receiveData
-    print(f"round tripped {len(data)} in {report.receiveTime} ns ({int(len(data) / (report.receiveTime / 1000000))} b/s)")
+    print(f"round tripped {len(data)} bytes in {report.receiveTime} ns ({int(len(data) / (report.receiveTime / 1_000_000_000.0))} B/s)")
 
     if d == data:
         print("round trip successful!")
@@ -130,7 +130,7 @@ def repl_subprogram():
             try:
                 report = port.receive()
                 data = report.receiveData
-                print(f"Got {len(data)} in {report.receiveTime} ns ({int(len(data) / (report.receiveTime / 1000000))} b/s)")
+                print(f"Got {len(data)} bytes in {report.receiveTime} ns ({int(len(data) / (report.receiveTime / 1_000_000_000.0))} B/s)")
                 result = data.decode('utf-8')
                 print(f"Received: {result}")
             except TimeoutError:
