@@ -1,0 +1,4 @@
+Hello, world!
+This is a short message written in UTF-8, to test the capabilities of the VPE transceiver!
+
+It should be about 142 bytes long
