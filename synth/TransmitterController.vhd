@@ -171,7 +171,7 @@ architecture Behavioral of TransmitterController is
     signal headerCompleteMode: std_logic;
     signal headerData: std_logic_vector(7 downto 0);
     
-    -- [DATA LATCH]
+    -- [READ LATCH]
     signal readEn: std_logic;
     signal readData: std_logic_vector(7 downto 0) := (others => '0');
     
@@ -220,9 +220,6 @@ begin
                 timebaseLoadedMode <= not ACTIVE;
             end if;
             timebaseNs <= to_integer(timebase);
-            --sevenSegmentHex(11 downto 8) <= std_logic_vector(timebase_length(3 downto 0));
-            --sevenSegmentHex(3 downto 2) <= '0' & timeBaseLoadedMode;
-            --sevenSegmentHex(15) <= timebaseLoadedMode;
         end if;
     end process;
     
@@ -249,11 +246,6 @@ begin
                 countLoadedMode <= not ACTIVE;
             end if;
             count <= to_integer(count_var);
-            --sevenSegmentHex(7 downto 4) <= std_logic_vector(count_length(3 downto 0));
-            --sevenSegmentHex(1 downto 0) <= '0' & countLoadedMode;
-            --sevenSegmentHex(11 downto 0) <= std_logic_vector(count_var(11 downto 0));
-            --sevenSegmentHex(6 downto 0) <= std_logic_vector(count_length(6 downto 0));
-            --sevenSegmentHex(7) <= countLoadedMode;
         end if;
     end process;
     
@@ -315,43 +307,25 @@ begin
     -- HEADER GENERATOR
     HEADER_GENERATOR: process(clock, reset)
         variable index: integer range 0 to 9 := 0;
-        variable timebaseVector: std_logic_vector(31 downto 0);
-        variable countVector: std_logic_vector(31 downto 0);
-        
+        variable header: std_logic_vector(79 downto 0);
     begin
         if (reset = ACTIVE) then
             index := 0;
         elsif (rising_edge(clock)) then
             headerCompleteMode <= not ACTIVE;
-            timebaseVector := std_logic_vector(to_unsigned(timebaseNs,32));
-            countVector := std_logic_vector(to_unsigned(count,32));
             if headerLoadEn = ACTIVE then
                 index := 0;
+                header(31 downto 0) := std_logic_vector(to_unsigned(count,32));
+                header(39 downto 32) := X"04";
+                header(71 downto 40) := std_logic_vector(to_unsigned(timebaseNs,32));
+                header(79 downto 72) := X"04";
             elsif headerNextEn = ACTIVE and index < 9  then
                 index := index + 1;
             end if;
-            case index is
-                when 0 | 5 =>
-                    headerData <= X"04"; -- length of the time base/count
-                when 1 =>
-                    headerData <= timebaseVector(31 downto 24);
-                when 2 =>
-                    headerData <= timebaseVector(23 downto 16);
-                when 3 =>
-                    headerData <= timebaseVector(15 downto 8);
-                when 4 =>
-                    headerData <= timebaseVector(7 downto 0);
-                when 6 =>
-                    headerData <= countVector(31 downto 24);
-                when 7 =>
-                    headerData <= countVector(23 downto 16);
-                when 8 =>
-                    headerData <= countVector(15 downto 8);
-                when 9 =>
-                    headerData <= countVector(7 downto 0);
-                    headerCompleteMode <= ACTIVE;
-                
-            end case;
+            headerData <= header(((10 - index)*8)-1 downto (9 - index)*8);
+            if index = 9 then
+                headerCompleteMode <= active;
+            end if;
         end if;
     end process;
     

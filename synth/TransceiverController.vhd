@@ -45,7 +45,8 @@ entity TransceiverController is
            sendToUartEn : in STD_LOGIC;
            uartTx : out STD_LOGIC;
            vpeTx : out STD_LOGIC;
-           sevenSegmentHex : out STD_LOGIC_VECTOR (15 downto 0));
+           sevenSegmentHexTx : out STD_LOGIC_VECTOR (15 downto 0);
+           sevenSegmentHexRx : out STD_LOGIC_VECTOR (15 downto 0));
 end TransceiverController;
 
 architecture Structural of TransceiverController is
@@ -126,25 +127,26 @@ begin
         txWriteData => tx_write_data,
         rxWriteData => rx_write_data,
         txWriteEn => tx_write_en,
-        rxWriteEn => '0',
+        rxWriteEn => rx_write_en,
         outTx => tx_data,
         outRx => rx_data
     );
     
-    --RX: ReceiverController generic map (
-    --    BUFFER_SIZE => BUFFER_SIZE
-    --) port map(
-    --    reset => reset,
-    --   clock => clock,
-    --    vpeRxLine => vpeRx,
-    --    sendToUartEn => sendToUartEn,
-    --    data => rx_data,
-    --    address => rx_addr,
-    --    uartTxLine => uartTx,
-    --    writeEn => rx_write_en,
-    --    -- sevenSegmentHex => sevenSegmentHex,
-    --    writeData => rx_write_data
-    --);
+    RX: ReceiverController generic map (
+        BUFFER_SIZE => BUFFER_SIZE,
+        CLOCK_FREQUENCY => CLOCK_FREQUENCY
+    ) port map(
+        reset => reset,
+        clock => clock,
+        vpeRxLine => vpeRx,
+        sendToUartEn => sendToUartEn,
+        data => rx_data,
+        address => rx_addr,
+        uartTxLine => uartTx,
+        writeEn => rx_write_en,
+        sevenSegmentHex => sevenSegmentHexTx,
+        writeData => rx_write_data
+    );
     
     TX: TransmitterController generic map (
         BUFFER_SIZE => BUFFER_SIZE,
@@ -158,7 +160,7 @@ begin
         address => tx_addr,
         vpeTxLine => vpeTx,
         writeEn => tx_write_en,
-        sevenSegmentHex => sevenSegmentHex,
+        sevenSegmentHex => sevenSegmentHexRx,
         writeData => tx_write_data
     );
 end Structural;

@@ -51,7 +51,8 @@ architecture TestBench of TransmitterTestBench is
                sendToUartEn : in STD_LOGIC;
                uartTx : out STD_LOGIC;
                vpeTx : out STD_LOGIC;
-               sevenSegmentHex : out STD_LOGIC_VECTOR (15 downto 0));
+               sevenSegmentHexTx : out STD_LOGIC_VECTOR (15 downto 0);
+               sevenSegmentHexRx : out STD_LOGIC_VECTOR (15 downto 0));
     end component;
     
     component VpeRx is
@@ -102,7 +103,6 @@ architecture TestBench of TransmitterTestBench is
     signal dataOut: std_logic_vector(7 downto 0);
     signal newDataEn: std_logic;
     signal frameEndEn: std_logic;
-    signal hexDebug: std_logic_vector(15 downto 0);
     
     -- Functions
     function nibble_to_text(nibble: std_logic_vector(3 downto 0)) return character is
@@ -289,8 +289,8 @@ begin
         vpeRx => '0',
         sendToVpeEn => sendToVpeEn,
         sendToUartEn => '0',
-        vpeTx => vpeTx,
-        sevenSegmentHex => hexDebug
+        vpeTx => vpeTx
+        -- sevenSegmentHex => hexDebug
     );
     
     TRANSMITTER: UartTx port map(
