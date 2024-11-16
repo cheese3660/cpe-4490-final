@@ -95,12 +95,11 @@ architecture Behavioral of ReceiverController is
         DELAY_TX_START,
         HEADER_SEND,
         READ_FIRST_BYTE,
-        SEND_FIRST_BYTE,
         BODY_SEND
     );
     
     -- CONSTANTS
-    constant ACTIVE: std_logic := '0';
+    constant ACTIVE: std_logic := '1';
     constant DATA_SELECT_HEADER: std_logic := not ACTIVE;
     constant DATA_SELECT_READ: std_logic := ACTIVE;
     
@@ -187,7 +186,7 @@ begin
         endFrameEn => frameEndEn
     );
     
-    DATA_LATCH: process(clock, reset) is
+    DATA_LATCH: process(clock, reset, vpeData) is
         variable latched: std_logic_vector(7 downto 0) := (others => '0');
     begin
         if (reset = ACTIVE) then
@@ -196,11 +195,6 @@ begin
             if newDataEn = ACTIVE then
                 latched := vpeDataUnlatched;
             end if;
-        end if;
-        
-        if newDataEn = ACTIVE then
-            vpeData <= vpeDataUnlatched;
-        else
             vpeData <= latched;
         end if;
     end process;
@@ -211,8 +205,8 @@ begin
         variable timebase_length: unsigned(7 downto 0) := (others => '0');
     begin
         if (reset = ACTIVE) then
-            timebase := (others => '0');
             timebase_length := (others => '0');
+            timebase := (others => '0');
         elsif (rising_edge(clock)) then
             if loadTimebaseLengthEn = ACTIVE then
                 timebase_length := unsigned(vpeData);
@@ -237,8 +231,8 @@ begin
         variable count_length: unsigned(7 downto 0) := (others => '0');
     begin
         if (reset = ACTIVE) then
-            count_var := (others => '0');
             count_length := (others => '0');
+            count_var := (others => '0');
         elsif (rising_edge(clock)) then
             if loadCountLengthEn = ACTIVE then
                 count_length := unsigned(vpeData);
@@ -256,17 +250,25 @@ begin
             count <= to_integer(count_var);
             
             
-            sevenSegmentHex(11 downto 0) <= std_logic_vector(to_unsigned(count,12));
+            -- sevenSegmentHex(7 downto 0) <= std_logic_vector(to_unsigned(count,8));
         end if;
     end process;
     
     -- TIMER
     TIMER: process(clock, reset)
+        variable timerEnabled: boolean := false;
     begin
         if (reset = ACTIVE) then
-            timerCycles <= (others => '0');
+            timerEnabled := false;
         elsif (rising_edge(clock)) then
-            timerCycles <= timerCycles+1;
+            if (timerStartEn = ACTIVE) then
+                timerEnabled := true;
+                timerCycles <= (others => '0');
+            elsif (timerEndEn = ACTIVE) then
+                timerEnabled := false;
+            elsif (timerEnabled) then
+                timerCycles <= timerCycles+1;
+            end if;
         end if;
     end process;
     
@@ -284,7 +286,7 @@ begin
             end if;
             
             if (addressIncrementEn = ACTIVE) then
-                if current_address < BUFFER_SIZE-1 then
+                if current_address < BUFFER_SIZE-1 then 
                     current_address := current_address+1;
                     if current_address = count then
                         addressTerminalMode <= ACTIVE;
@@ -295,7 +297,7 @@ begin
             end if;
             
             address <= current_address;
-            --sevenSegmentHex(11 downto 0) <= std_logic_vector(to_unsigned(current_address,12));
+            sevenSegmentHex(11 downto 0) <= std_logic_vector(to_unsigned(current_address,12));
         end if;
     end process;
     
@@ -304,7 +306,7 @@ begin
         variable index: integer range 0 to 11 := 0;
         variable header: std_logic_vector((12*8)-1 downto 0);
     begin
-        if reset = ACTIVE then
+        if (reset = ACTIVE) then
             index := 0;
         elsif rising_edge(clock) then
             headerCompleteMode <= not ACTIVE;
@@ -354,16 +356,32 @@ begin
         txComplete => txComplete
     );
 
+
+    -- MAP VPE DATA TO MEMORY
+    writeData <= vpeData;
+
     -- STATE MACHINE
-    CONTROL: process(clock, reset) is
+    CONTROL_RX: process(clock, reset) is
+        variable justSent: boolean := false;
     begin
         if reset = ACTIVE then
             state <= IDLE;
-        else
+            justSent := false;
+        elsif rising_edge(clock) then
             loadTimebaseLengthEn <= not ACTIVE;
             loadCountLengthEn <= not ACTIVE;
             shiftInTimebaseEn <= not ACTIVE;
             shiftInCountEn <= not ACTIVE;
+            timerStartEn <= not ACTIVE;
+            addressClearEn <= not ACTIVE;
+            writeEn <= not ACTIVE;
+            timerEndEn <= not ACTIVE;
+            addressIncrementEn <= not ACTIVE;
+            headerLoadEn <= not ACTIVE;
+            headerNextEn <= not ACTIVE;
+            txEn <= not ACTIVE;
+            readEn <= not ACTIVE;
+            dataSelect <= DATA_SELECT_HEADER;
             
             sevenSegmentHex(15 downto 12) <= X"F";
             
@@ -372,6 +390,10 @@ begin
                     if newDataEn = ACTIVE then
                         loadTimebaseLengthEn <= ACTIVE;
                         state <= LOAD_TIMEBASE;
+                    elsif sendToUartEn = ACTIVE then
+                        headerLoadEn <= ACTIVE;
+                        addressClearEn <= ACTIVE;
+                        state <= DELAY_TX_START;
                     end if;
                     
                     sevenSegmentHex(15 downto 12) <= X"0";
@@ -389,23 +411,93 @@ begin
                     sevenSegmentHex(15 downto 12) <= X"1";
                
                 when LOAD_COUNT =>
-                    if frameEndEn = ACTIVE then
-                        if newDataEn = ACTIVE then
-                            shiftInCountEn <= ACTIVE;
-                        end if;
-                        state <= SETUP_RX_A;
-                    elsif newDataEn = ACTIVE then
+                    if newDataEn = ACTIVE then
                         shiftInCountEn <= ACTIVE;
+                    end if;
+                    if frameEndEn = ACTIVE then
+                        state <= SETUP_RX_A;
                     end if;
                     
                     sevenSegmentHex(15 downto 12) <= X"2";
             
                 when SETUP_RX_A =>
+                    timerStartEn <= ACTIVE;
+                    state <= SETUP_RX_B;
                     
                     sevenSegmentHex(15 downto 12) <= X"3";
                 
-                when others =>
-                    sevenSegmentHex(15 downto 12) <= X"E";
+                when SETUP_RX_B =>
+                    addressClearEn <= ACTIVE;
+                    state <= READ_DATA;
+                    
+                    sevenSegmentHex(15 downto 12) <= X"4";
+                
+                when READ_DATA =>
+                    if newDataEn = ACTIVE then
+                        writeEn <= ACTIVE;
+                    end if;
+                    if frameEndEn = ACTIVE then
+                        timerEndEn <= ACTIVE;
+                        state <= IDLE;
+                    elsif newDataEn = ACTIVE then
+                        state <= INCREMENT_ADDRESS;
+                    end if;
+                    
+                    sevenSegmentHex(15 downto 12) <= X"5";
+                
+                when INCREMENT_ADDRESS =>
+                    addressIncrementEn <= ACTIVE;
+                    state <= READ_DATA;
+                    
+                    sevenSegmentHex(15 downto 12) <= X"6";
+                
+                when DELAY_TX_START =>
+                    state <= HEADER_SEND;
+                    
+                    sevenSegmentHex(15 downto 12) <= X"7";
+                
+                when HEADER_SEND =>
+                    if txComplete = ACTIVE and not justSent then
+                        if headerCompleteMode = ACTIVE then
+                            state <= READ_FIRST_BYTE;
+                        else
+                            justSent := true;
+                            headerNextEn <= ACTIVE;
+                        end if;
+                        txEn <= ACTIVE;
+                    else
+                        justSent := false;
+                    end if;
+                    
+                    sevenSegmentHex(15 downto 12) <= X"8";
+            
+                when READ_FIRST_BYTE =>
+                    readEn <= ACTIVE;
+                    addressIncrementEn <= ACTIVE;
+                    dataSelect <= DATA_SELECT_READ;
+                    state <= BODY_SEND;
+                    justSent := false;
+                    
+                    sevenSegmentHex(15 downto 12) <= X"9";
+                    
+                when BODY_SEND =>
+                    dataSelect <= DATA_SELECT_READ;
+                    if txComplete = ACTIVE and not justSent then
+                        if addressTerminalMode = ACTIVE then
+                            justSent := false;
+                            state <= IDLE;
+                        else
+                            justSent := true;
+                            readEn <= ACTIVE;
+                            addressIncrementEn <= ACTIVE;
+                        end if;
+                        txEn <= ACTIVE;
+                    else
+                        justSent := false;
+                    end if;
+                    
+                    sevenSegmentHex(15 downto 12) <= X"A";
+                    
             end case;
         end if;
     end process;

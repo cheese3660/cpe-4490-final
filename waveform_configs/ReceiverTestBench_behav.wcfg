@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="ReceiverTestBench_behav.wdb" id="1">
+         <top_modules>
+            <top_module name="ReceiverTestBench" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <zoom_setting>
+      <ZoomStartTime time="0.038776890 ms"></ZoomStartTime>
+      <ZoomEndTime time="64.588776891 ms"></ZoomEndTime>
+      <Cursor1Time time="18.938776890 ms"></Cursor1Time>
+   </zoom_setting>
+   <column_width_setting>
+      <NameColumnWidth column_width="276"></NameColumnWidth>
+      <ValueColumnWidth column_width="104"></ValueColumnWidth>
+   </column_width_setting>
+   <WVObjectSize size="74" />
+   <wvobject fp_name="/ReceiverTestBench/clock" type="logic">
+      <obj_property name="ElementShortName">clock</obj_property>
+      <obj_property name="ObjectShortName">clock</obj_property>
+   </wvobject>
+   <wvobject fp_name="/ReceiverTestBench/reset" type="logic">
+      <obj_property name="ElementShortName">reset</obj_property>
+      <obj_property name="ObjectShortName">reset</obj_property>
+   </wvobject>
+   <wvobject fp_name="/ReceiverTestBench/uartTx" type="logic">
+      <obj_property name="ElementShortName">uartTx</obj_property>
+      <obj_property name="ObjectShortName">uartTx</obj_property>
+   </wvobject>
+   <wvobject fp_name="/ReceiverTestBench/sendToUartEn" type="logic">
+      <obj_property name="ElementShortName">sendToUartEn</obj_property>
+      <obj_property name="ObjectShortName">sendToUartEn</obj_property>
+   </wvobject>
+   <wvobject fp_name="/ReceiverTestBench/vpeRx" type="logic">
+      <obj_property name="ElementShortName">vpeRx</obj_property>
+      <obj_property name="ObjectShortName">vpeRx</obj_property>
+   </wvobject>
+   <wvobject fp_name="/ReceiverTestBench/dataIn" type="array">
+      <obj_property name="ElementShortName">dataIn[7:0]</obj_property>
+      <obj_property name="ObjectShortName">dataIn[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/ReceiverTestBench/txMode" type="logic">
+      <obj_property name="ElementShortName">txMode</obj_property>
+      <obj_property name="ObjectShortName">txMode</obj_property>
+   </wvobject>
+   <wvobject fp_name="/ReceiverTestBench/txTimebase" type="other">
+      <obj_property name="ElementShortName">txTimebase</obj_property>
+      <obj_property name="ObjectShortName">txTimebase</obj_property>
+   </wvobject>
+   <wvobject fp_name="/ReceiverTestBench/wordEndEn" type="logic">
+      <obj_property name="ElementShortName">wordEndEn</obj_property>
+      <obj_property name="ObjectShortName">wordEndEn</obj_property>
+   </wvobject>
+   <wvobject fp_name="/ReceiverTestBench/dataOut" type="array">
+      <obj_property name="ElementShortName">dataOut[7:0]</obj_property>
+      <obj_property name="ObjectShortName">dataOut[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/ReceiverTestBench/dataReady" type="logic">
+      <obj_property name="ElementShortName">dataReady</obj_property>
+      <obj_property name="ObjectShortName">dataReady</obj_property>
+   </wvobject>
+   <wvobject fp_name="/ReceiverTestBench/ACTIVE" type="logic">
+      <obj_property name="ElementShortName">ACTIVE</obj_property>
+      <obj_property name="ObjectShortName">ACTIVE</obj_property>
+   </wvobject>
+   <wvobject type="divider" fp_name="divider131">
+      <obj_property name="label">RECEIVER</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+   </wvobject>
+   <wvobject fp_name="/ReceiverTestBench/TRANSCEIVER/RX/clock" type="logic">
+      <obj_property name="ElementShortName">clock</obj_property>
+      <obj_property name="ObjectShortName">clock</obj_property>
+   </wvobject>
+   <wvobject fp_name="/ReceiverTestBench/TRANSCEIVER/RX/reset" type="logic">
+      <obj_property name="ElementShortName">reset</obj_property>
+      <obj_property name="ObjectShortName">reset</obj_property>
+   </wvobject>
+   <wvobject fp_name="/ReceiverTestBench/TRANSCEIVER/RX/vpeRxLine" type="logic">
+      <obj_property name="ElementShortName">vpeRxLine</obj_property>
+      <obj_property name="ObjectShortName">vpeRxLine</obj_property>
+   </wvobject>
+   <wvobject fp_name="/ReceiverTestBench/TRANSCEIVER/RX/sendToUartEn" type="logic">
+      <obj_property name="ElementShortName">sendToUartEn</obj_property>
+      <obj_property name="ObjectShortName">sendToUartEn</obj_property>
+   </wvobject>
+   <wvobject fp_name="/ReceiverTestBench/TRANSCEIVER/RX/data" type="array">
+      <obj_property name="ElementShortName">data[7:0]</obj_property>
+      <obj_property name="ObjectShortName">data[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/ReceiverTestBench/TRANSCEIVER/RX/address" type="other">
+      <obj_property name="ElementShortName">address</obj_property>
+      <obj_property name="ObjectShortName">address</obj_property>
+   </wvobject>
+   <wvobject fp_name="/ReceiverTestBench/TRANSCEIVER/RX/uartTxLine" type="logic">
+      <obj_property name="ElementShortName">uartTxLine</obj_property>
+      <obj_property name="ObjectShortName">uartTxLine</obj_property>
+   </wvobject>
+   <wvobject fp_name="/ReceiverTestBench/TRANSCEIVER/RX/writeEn" type="logic">
+      <obj_property name="ElementShortName">writeEn</obj_property>
+      <obj_property name="ObjectShortName">writeEn</obj_property>
+   </wvobject>
+   <wvobject fp_name="/ReceiverTestBench/TRANSCEIVER/RX/sevenSegmentHex" type="array">
+      <obj_property name="ElementShortName">sevenSegmentHex[15:0]</obj_property>
+      <obj_property name="ObjectShortName">sevenSegmentHex[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/ReceiverTestBench/TRANSCEIVER/RX/writeData" type="array">
+      <obj_property name="ElementShortName">writeData[7:0]</obj_property>
+      <obj_property name="ObjectShortName">writeData[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/ReceiverTestBench/TRANSCEIVER/RX/vpeDataUnlatched" type="array">
+      <obj_property name="ElementShortName">vpeDataUnlatched[7:0]</obj_property>
+      <obj_property name="ObjectShortName">vpeDataUnlatched[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/ReceiverTestBench/TRANSCEIVER/RX/newDataEn" type="logic">
+      <obj_property name="ElementShortName">newDataEn</obj_property>
+      <obj_property name="ObjectShortName">newDataEn</obj_property>
+   </wvobject>
+   <wvobject fp_name="/ReceiverTestBench/TRANSCEIVER/RX/frameEndEn" type="logic">
+      <obj_property name="ElementShortName">frameEndEn</obj_property>
+      <obj_property name="ObjectShortName">frameEndEn</obj_property>
+   </wvobject>
+   <wvobject fp_name="/ReceiverTestBench/TRANSCEIVER/RX/vpeData" type="array">
+      <obj_property name="ElementShortName">vpeData[7:0]</obj_property>
+      <obj_property name="ObjectShortName">vpeData[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/ReceiverTestBench/TRANSCEIVER/RX/state" type="other">
+      <obj_property name="ElementShortName">state</obj_property>
+      <obj_property name="ObjectShortName">state</obj_property>
+   </wvobject>
+   <wvobject fp_name="/ReceiverTestBench/TRANSCEIVER/RX/shiftInTimebaseEn" type="logic">
+      <obj_property name="ElementShortName">shiftInTimebaseEn</obj_property>
+      <obj_property name="ObjectShortName">shiftInTimebaseEn</obj_property>
+   </wvobject>
+   <wvobject fp_name="/ReceiverTestBench/TRANSCEIVER/RX/loadTimebaseLengthEn" type="logic">
+      <obj_property name="ElementShortName">loadTimebaseLengthEn</obj_property>
+      <obj_property name="ObjectShortName">loadTimebaseLengthEn</obj_property>
+   </wvobject>
+   <wvobject fp_name="/ReceiverTestBench/TRANSCEIVER/RX/timebaseNs" type="other">
+      <obj_property name="ElementShortName">timebaseNs</obj_property>
+      <obj_property name="ObjectShortName">timebaseNs</obj_property>
+   </wvobject>
+   <wvobject fp_name="/ReceiverTestBench/TRANSCEIVER/RX/timebaseLoadedMode" type="logic">
+      <obj_property name="ElementShortName">timebaseLoadedMode</obj_property>
+      <obj_property name="ObjectShortName">timebaseLoadedMode</obj_property>
+   </wvobject>
+   <wvobject fp_name="/ReceiverTestBench/TRANSCEIVER/RX/shiftInCountEn" type="logic">
+      <obj_property name="ElementShortName">shiftInCountEn</obj_property>
+      <obj_property name="ObjectShortName">shiftInCountEn</obj_property>
+   </wvobject>
+   <wvobject fp_name="/ReceiverTestBench/TRANSCEIVER/RX/loadCountLengthEn" type="logic">
+      <obj_property name="ElementShortName">loadCountLengthEn</obj_property>
+      <obj_property name="ObjectShortName">loadCountLengthEn</obj_property>
+   </wvobject>
+   <wvobject fp_name="/ReceiverTestBench/TRANSCEIVER/RX/count" type="other">
+      <obj_property name="ElementShortName">count</obj_property>
+      <obj_property name="ObjectShortName">count</obj_property>
+   </wvobject>
+   <wvobject fp_name="/ReceiverTestBench/TRANSCEIVER/RX/countLoadedMode" type="logic">
+      <obj_property name="ElementShortName">countLoadedMode</obj_property>
+      <obj_property name="ObjectShortName">countLoadedMode</obj_property>
+   </wvobject>
+   <wvobject fp_name="/ReceiverTestBench/TRANSCEIVER/RX/addressClearEn" type="logic">
+      <obj_property name="ElementShortName">addressClearEn</obj_property>
+      <obj_property name="ObjectShortName">addressClearEn</obj_property>
+   </wvobject>
+   <wvobject fp_name="/ReceiverTestBench/TRANSCEIVER/RX/addressIncrementEn" type="logic">
+      <obj_property name="ElementShortName">addressIncrementEn</obj_property>
+      <obj_property name="ObjectShortName">addressIncrementEn</obj_property>
+   </wvobject>
+   <wvobject fp_name="/ReceiverTestBench/TRANSCEIVER/RX/addressTerminalMode" type="logic">
+      <obj_property name="ElementShortName">addressTerminalMode</obj_property>
+      <obj_property name="ObjectShortName">addressTerminalMode</obj_property>
+   </wvobject>
+   <wvobject fp_name="/ReceiverTestBench/TRANSCEIVER/RX/timerStartEn" type="logic">
+      <obj_property name="ElementShortName">timerStartEn</obj_property>
+      <obj_property name="ObjectShortName">timerStartEn</obj_property>
+   </wvobject>
+   <wvobject fp_name="/ReceiverTestBench/TRANSCEIVER/RX/timerEndEn" type="logic">
+      <obj_property name="ElementShortName">timerEndEn</obj_property>
+      <obj_property name="ObjectShortName">timerEndEn</obj_property>
+   </wvobject>
+   <wvobject fp_name="/ReceiverTestBench/TRANSCEIVER/RX/timerCycles" type="array">
+      <obj_property name="ElementShortName">timerCycles[47:0]</obj_property>
+      <obj_property name="ObjectShortName">timerCycles[47:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/ReceiverTestBench/TRANSCEIVER/RX/headerLoadEn" type="logic">
+      <obj_property name="ElementShortName">headerLoadEn</obj_property>
+      <obj_property name="ObjectShortName">headerLoadEn</obj_property>
+   </wvobject>
+   <wvobject fp_name="/ReceiverTestBench/TRANSCEIVER/RX/headerNextEn" type="logic">
+      <obj_property name="ElementShortName">headerNextEn</obj_property>
+      <obj_property name="ObjectShortName">headerNextEn</obj_property>
+   </wvobject>
+   <wvobject fp_name="/ReceiverTestBench/TRANSCEIVER/RX/headerCompleteMode" type="logic">
+      <obj_property name="ElementShortName">headerCompleteMode</obj_property>
+      <obj_property name="ObjectShortName">headerCompleteMode</obj_property>
+   </wvobject>
+   <wvobject fp_name="/ReceiverTestBench/TRANSCEIVER/RX/headerData" type="array">
+      <obj_property name="ElementShortName">headerData[7:0]</obj_property>
+      <obj_property name="ObjectShortName">headerData[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/ReceiverTestBench/TRANSCEIVER/RX/readEn" type="logic">
+      <obj_property name="ElementShortName">readEn</obj_property>
+      <obj_property name="ObjectShortName">readEn</obj_property>
+   </wvobject>
+   <wvobject fp_name="/ReceiverTestBench/TRANSCEIVER/RX/readData" type="array">
+      <obj_property name="ElementShortName">readData[7:0]</obj_property>
+      <obj_property name="ObjectShortName">readData[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/ReceiverTestBench/TRANSCEIVER/RX/dataSelect" type="logic">
+      <obj_property name="ElementShortName">dataSelect</obj_property>
+      <obj_property name="ObjectShortName">dataSelect</obj_property>
+   </wvobject>
+   <wvobject fp_name="/ReceiverTestBench/TRANSCEIVER/RX/txEn" type="logic">
+      <obj_property name="ElementShortName">txEn</obj_property>
+      <obj_property name="ObjectShortName">txEn</obj_property>
+   </wvobject>
+   <wvobject fp_name="/ReceiverTestBench/TRANSCEIVER/RX/txData" type="array">
+      <obj_property name="ElementShortName">txData[7:0]</obj_property>
+      <obj_property name="ObjectShortName">txData[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/ReceiverTestBench/TRANSCEIVER/RX/txComplete" type="logic">
+      <obj_property name="ElementShortName">txComplete</obj_property>
+      <obj_property name="ObjectShortName">txComplete</obj_property>
+   </wvobject>
+   <wvobject fp_name="/ReceiverTestBench/TRANSCEIVER/RX/BUFFER_SIZE" type="other">
+      <obj_property name="ElementShortName">BUFFER_SIZE</obj_property>
+      <obj_property name="ObjectShortName">BUFFER_SIZE</obj_property>
+   </wvobject>
+   <wvobject fp_name="/ReceiverTestBench/TRANSCEIVER/RX/CLOCK_FREQUENCY" type="other">
+      <obj_property name="ElementShortName">CLOCK_FREQUENCY</obj_property>
+      <obj_property name="ObjectShortName">CLOCK_FREQUENCY</obj_property>
+   </wvobject>
+   <wvobject fp_name="/ReceiverTestBench/TRANSCEIVER/RX/ACTIVE" type="logic">
+      <obj_property name="ElementShortName">ACTIVE</obj_property>
+      <obj_property name="ObjectShortName">ACTIVE</obj_property>
+   </wvobject>
+   <wvobject fp_name="/ReceiverTestBench/TRANSCEIVER/RX/DATA_SELECT_HEADER" type="logic">
+      <obj_property name="ElementShortName">DATA_SELECT_HEADER</obj_property>
+      <obj_property name="ObjectShortName">DATA_SELECT_HEADER</obj_property>
+   </wvobject>
+   <wvobject fp_name="/ReceiverTestBench/TRANSCEIVER/RX/DATA_SELECT_READ" type="logic">
+      <obj_property name="ElementShortName">DATA_SELECT_READ</obj_property>
+      <obj_property name="ObjectShortName">DATA_SELECT_READ</obj_property>
+   </wvobject>
+   <wvobject type="divider" fp_name="divider1068">
+      <obj_property name="label">UART TX</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="BkColor">#008080</obj_property>
+   </wvobject>
+   <wvobject fp_name="/ReceiverTestBench/TRANSCEIVER/RX/UART_TRANSMITTER/clock" type="logic">
+      <obj_property name="ElementShortName">clock</obj_property>
+      <obj_property name="ObjectShortName">clock</obj_property>
+   </wvobject>
+   <wvobject fp_name="/ReceiverTestBench/TRANSCEIVER/RX/UART_TRANSMITTER/reset" type="logic">
+      <obj_property name="ElementShortName">reset</obj_property>
+      <obj_property name="ObjectShortName">reset</obj_property>
+   </wvobject>
+   <wvobject fp_name="/ReceiverTestBench/TRANSCEIVER/RX/UART_TRANSMITTER/txEn" type="logic">
+      <obj_property name="ElementShortName">txEn</obj_property>
+      <obj_property name="ObjectShortName">txEn</obj_property>
+   </wvobject>
+   <wvobject fp_name="/ReceiverTestBench/TRANSCEIVER/RX/UART_TRANSMITTER/dataIn" type="array">
+      <obj_property name="ElementShortName">dataIn[7:0]</obj_property>
+      <obj_property name="ObjectShortName">dataIn[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/ReceiverTestBench/TRANSCEIVER/RX/UART_TRANSMITTER/txComplete" type="logic">
+      <obj_property name="ElementShortName">txComplete</obj_property>
+      <obj_property name="ObjectShortName">txComplete</obj_property>
+   </wvobject>
+   <wvobject fp_name="/ReceiverTestBench/TRANSCEIVER/RX/UART_TRANSMITTER/dataOut" type="logic">
+      <obj_property name="ElementShortName">dataOut</obj_property>
+      <obj_property name="ObjectShortName">dataOut</obj_property>
+   </wvobject>
+   <wvobject fp_name="/ReceiverTestBench/TRANSCEIVER/RX/UART_TRANSMITTER/state" type="other">
+      <obj_property name="ElementShortName">state</obj_property>
+      <obj_property name="ObjectShortName">state</obj_property>
+   </wvobject>
+   <wvobject fp_name="/ReceiverTestBench/TRANSCEIVER/RX/UART_TRANSMITTER/bitTimeCount" type="other">
+      <obj_property name="ElementShortName">bitTimeCount</obj_property>
+      <obj_property name="ObjectShortName">bitTimeCount</obj_property>
+   </wvobject>
+   <wvobject fp_name="/ReceiverTestBench/TRANSCEIVER/RX/UART_TRANSMITTER/dataBuffer" type="array">
+      <obj_property name="ElementShortName">dataBuffer[7:0]</obj_property>
+      <obj_property name="ObjectShortName">dataBuffer[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/ReceiverTestBench/TRANSCEIVER/RX/UART_TRANSMITTER/BAUD_RATE" type="other">
+      <obj_property name="ElementShortName">BAUD_RATE</obj_property>
+      <obj_property name="ObjectShortName">BAUD_RATE</obj_property>
+   </wvobject>
+   <wvobject fp_name="/ReceiverTestBench/TRANSCEIVER/RX/UART_TRANSMITTER/CLOCK_FREQ" type="other">
+      <obj_property name="ElementShortName">CLOCK_FREQ</obj_property>
+      <obj_property name="ObjectShortName">CLOCK_FREQ</obj_property>
+   </wvobject>
+   <wvobject fp_name="/ReceiverTestBench/TRANSCEIVER/RX/UART_TRANSMITTER/ACTIVE" type="logic">
+      <obj_property name="ElementShortName">ACTIVE</obj_property>
+      <obj_property name="ObjectShortName">ACTIVE</obj_property>
+   </wvobject>
+   <wvobject fp_name="/ReceiverTestBench/TRANSCEIVER/RX/UART_TRANSMITTER/TX_IDLE" type="logic">
+      <obj_property name="ElementShortName">TX_IDLE</obj_property>
+      <obj_property name="ObjectShortName">TX_IDLE</obj_property>
+   </wvobject>
+   <wvobject fp_name="/ReceiverTestBench/TRANSCEIVER/RX/UART_TRANSMITTER/START_BIT" type="logic">
+      <obj_property name="ElementShortName">START_BIT</obj_property>
+      <obj_property name="ObjectShortName">START_BIT</obj_property>
+   </wvobject>
+   <wvobject fp_name="/ReceiverTestBench/TRANSCEIVER/RX/UART_TRANSMITTER/STOP_BIT" type="logic">
+      <obj_property name="ElementShortName">STOP_BIT</obj_property>
+      <obj_property name="ObjectShortName">STOP_BIT</obj_property>
+   </wvobject>
+   <wvobject fp_name="/ReceiverTestBench/TRANSCEIVER/RX/UART_TRANSMITTER/FULL_COUNT" type="other">
+      <obj_property name="ElementShortName">FULL_COUNT</obj_property>
+      <obj_property name="ObjectShortName">FULL_COUNT</obj_property>
+   </wvobject>
+</wave_config>

@@ -144,7 +144,7 @@ begin
         address => rx_addr,
         uartTxLine => uartTx,
         writeEn => rx_write_en,
-        sevenSegmentHex => sevenSegmentHexTx,
+        sevenSegmentHex => sevenSegmentHexRx,
         writeData => rx_write_data
     );
     
@@ -160,7 +160,7 @@ begin
         address => tx_addr,
         vpeTxLine => vpeTx,
         writeEn => tx_write_en,
-        sevenSegmentHex => sevenSegmentHexRx,
+        sevenSegmentHex => sevenSegmentHexTx,
         writeData => tx_write_data
     );
 end Structural;

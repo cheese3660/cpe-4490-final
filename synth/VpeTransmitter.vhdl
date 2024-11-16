@@ -187,9 +187,6 @@ begin
     begin
         if (reset = ACTIVE) then
             nibbleIndex := 0;
-            storedWord := (others => '0');
-            currentNibble <= (others => '0');
-            lastNibbleMode <= not ACTIVE;
         elsif (rising_edge(clock)) then
             if (dataLoadEn = ACTIVE) then
                 storedWord := data;
@@ -295,13 +292,13 @@ begin
     begin
         if (reset = ACTIVE) then
             txState <= IDLE;
+            delayed := not ACTIVE;
             dataLoadEn <= not ACTIVE;
             dataShiftEn <= not ACTIVE;
             frameStart <= not ACTIVE;
             wordStart <= not ACTIVE;
             pulseLoadEn <= not ACTIVE;
             wordEndEn <= not ACTIVE;
-            delayed := not ACTIVE;
         elsif (rising_edge(clock)) then
             dataLoadEn <= not ACTIVE;
             dataShiftEn <= not ACTIVE;

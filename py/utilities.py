@@ -4,6 +4,7 @@ import sys
 import argparse
 import serial.tools
 import serial.tools.list_ports
+import vpe
 
 
 parser = argparse.ArgumentParser(
@@ -66,21 +67,75 @@ def send_file_subprogram():
     if not args.file:
         print("Expected a file name to send!")
     f = open(args.file,"rb")
-    d = bytearray(f.read())
+    d = f.read()
     f.close()
-    buffer = bytearray()
-    tb = compact_value(int(args.timebase))
-    buffer.append(len(tb))
-    buffer += tb
-    cnt = compact_value(len(d))
-    buffer.append(len(cnt))
-    buffer += cnt
-    buffer += d
-    print(f"sending {len(buffer)} bytes (in hex {hex(len(buffer))})")
-    print(f"file size {len(d)} (in hex {hex(len(d))})")
-    s = serial.Serial(args.port, baudrate=115200)
-    s.write(buffer)
-    s.close()
+    port = vpe.VpeSerialAdapter(args.port)
+    port.send(d, int(args.timebase))
+    port.close()
+
+def receive_file_subprogram():
+    if not args.file:
+        print("Expected a file name to receive!")
+    
+
+    port = vpe.VpeSerialAdapter(args.port)
+    report = port.receive()
+    data = report.receiveData
+    print(f"received {len(data)} in {report.receiveTime} ns ({int(len(data) / (report.receiveTime / 1000000))} b/s)")
+
+    f = open(args.file, "wb")
+    f.write(data)
+    f.close()
+
+def round_trip_subprogram():
+    if not args.file:
+        print("Expected a file name to round trip!")
+    f = open(args.file,"rb")
+    d = f.read()
+    f.close()
+    port = vpe.VpeSerialAdapter(args.port)
+    port.send(d, int(args.timebase))
+    report = port.receive()
+    data = report.receiveData
+    print(f"round tripped {len(data)} in {report.receiveTime} ns ({int(len(data) / (report.receiveTime / 1000000))} b/s)")
+
+    if d == data:
+        print("round trip successful!")
+    else:
+        print("round trip failed!")
+    port.close()
+
+def repl_subprogram():
+    port = vpe.VpeSerialAdapter(args.port,30)
+    currentT0 = int(args.timebase)
+    print("/---------------------------------------------\\")
+    print("| VPE SHELL                                   |")
+    print("|                                             |")
+    print("| T0=... (without spaces) to set the T0 value |")
+    print("| EXIT to quit                                |")
+    print("| anything else to round trip that data       |")
+    print("\\---------------------------------------------/")
+    while True:
+        print("> ",end="")
+        cmd = input()
+        if cmd.lower() == "exit":
+            break
+        elif cmd.startswith("T0="):
+            currentT0 = int(cmd[3:])
+        else:
+            text = cmd.encode('utf-8')
+            print(f"Sending: {cmd}")
+            port.send(text, currentT0)
+            print(f"Waiting to receive...")
+            try:
+                report = port.receive()
+                data = report.receiveData
+                print(f"Got {len(data)} in {report.receiveTime} ns ({int(len(data) / (report.receiveTime / 1000000))} b/s)")
+                result = data.decode('utf-8')
+                print(f"Received: {result}")
+            except TimeoutError:
+                print("Timed out...")
+    port.close()
 
 if args.subprogram == "list":
     list_ports_subprogram()
@@ -88,5 +143,11 @@ elif args.subprogram == "header":
     send_header_subprogram()
 elif args.subprogram == "file":
     send_file_subprogram()
+elif args.subprogram == "repl":
+    repl_subprogram()
+elif args.subprogram == "receive":
+    receive_file_subprogram()
+elif args.subprogram == "round-trip":
+    round_trip_subprogram()
 else:
     print("Invalid subprogram")

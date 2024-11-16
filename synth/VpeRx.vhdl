@@ -208,11 +208,12 @@ begin
         variable next_clock_action: next_clock_action_t := NONE;
     begin
         if (reset = ACTIVE) then
-            cyclesRemaining := 0;
             fullCycleSize := 0;
-            lowCount <= 0;
+            cyclesRemaining := 0;
             highCount <= 0;
+            lowCount <= 0;
             next_clock_action := NONE;
+            pulseEndEn <= not ACTIVE;
         elsif (rising_edge(clock)) then
             -- Perform the action described by next_clock_action
             pulseEndEn <= not ACTIVE;

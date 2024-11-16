@@ -203,8 +203,8 @@ begin
         variable timebase_length: unsigned(7 downto 0) := (others => '0');
     begin
         if (reset = ACTIVE) then
-            timebase := (others => '0');
             timebase_length := (others => '0');
+            timebase := (others => '0');
         elsif (rising_edge(clock)) then
             if loadTimebaseLengthEn = ACTIVE then
                 timebase_length := unsigned(uartData);
@@ -229,8 +229,8 @@ begin
         variable count_length: unsigned(7 downto 0) := (others => '0');
     begin
         if (reset = ACTIVE) then
-            count_var := (others => '0');
             count_length := (others => '0');
+            count_var := (others => '0');
         elsif (rising_edge(clock)) then
             if loadCountLengthEn = ACTIVE then
                 count_length := unsigned(uartData);
@@ -310,6 +310,7 @@ begin
         variable header: std_logic_vector(79 downto 0);
     begin
         if (reset = ACTIVE) then
+            -- No reset as it will always be in a valid state when needed
             index := 0;
         elsif (rising_edge(clock)) then
             headerCompleteMode <= not ACTIVE;
@@ -333,7 +334,7 @@ begin
     READ_LATCH: process(clock, reset)
     begin
         if (reset = ACTIVE) then
-            readData <= (others => '0');
+            -- No reset as it will always be in a valid state when needed
         elsif (rising_edge(clock)) then
             if readEn = ACTIVE then
                 readData <= data;
@@ -352,7 +353,9 @@ begin
         variable lastSerial: std_logic := not ACTIVE;
     begin
         if (reset = ACTIVE) then
-            lastSerial := not ACTIVE;
+            -- No reset as it will always be in a valid state when needed
+            lastSerial := '0';
+            pulseEndedEn <= not ACTIVE;
         elsif (rising_edge(clock)) then
             pulseEndedEn <= not ACTIVE;
             if vpeSerial = not ACTIVE and lastSerial = ACTIVE then

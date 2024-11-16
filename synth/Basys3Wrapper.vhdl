@@ -92,6 +92,9 @@ architecture Wrapper of Basys3Wrapper is
     signal sendToVpeMode: std_logic;
     signal sendToVpeEn: std_logic;
     
+    signal sendToUartMode: std_logic;
+    signal sendToUartEn: std_logic;
+    
     signal switchDisplayMode: std_logic;
     signal switchDisplayEn: std_logic;
     signal currentDisplay: std_logic := '0';
@@ -106,7 +109,7 @@ begin
         variable count: integer range 0 to PERIOD-1 := 0;
     begin
         if (reset = ACTIVE) then
-            count := 0;
+            -- Ignore resets
         elsif (rising_edge(clock)) then
             debounceSampleEn <= not ACTIVE;
             if count < PERIOD-1 then
@@ -134,6 +137,24 @@ begin
         reset => reset,
         trigger => sendToVpeMode,
         pulseOut => sendToVpeEn
+    );
+    
+    DEBOUNCE_SEND_TO_UART: Debouncer generic map(
+        QUEUE_LENGTH => 16,
+        QUEUE_FILL_AMOUNT => 12
+    ) port map (
+        clock => clock,
+        reset => reset,
+        sampleEn => debounceSampleEn,
+        noisySignal => btnU,
+        debouncedSignal => sendToUartMode
+    );
+    
+    LEVEL_DETECT_SEND_TO_UART: LevelDetector port map(
+        clock => clock,
+        reset => reset,
+        trigger => sendToUartMode,
+        pulseOut => sendToUartEn
     );
     
     DEBOUNCE_SWITCH_DISPLAY: Debouncer generic map(
@@ -174,8 +195,9 @@ begin
         uartRx => RsRx,
         vpeRx => JB_0,
         sendToVpeEn => sendToVpeEn,
-        sendToUartEn => '0',
+        sendToUartEn => sendToUartEn,
         vpeTx => JA_0,
+        uartTx => RsTx,
         sevenSegmentHexTx => sevenSegmentHexTx,
         sevenSegmentHexRx => sevenSegmentHexRx
     );

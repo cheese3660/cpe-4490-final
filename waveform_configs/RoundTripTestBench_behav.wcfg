@@ -1,0 +1,443 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="RoundTripTestBench_behav.wdb" id="1">
+         <top_modules>
+            <top_module name="RoundTripTestBench" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <zoom_setting>
+      <ZoomStartTime time="10.001000000 ms"></ZoomStartTime>
+      <ZoomEndTime time="22.871000001 ms"></ZoomEndTime>
+      <Cursor1Time time="20.001000000 ms"></Cursor1Time>
+   </zoom_setting>
+   <column_width_setting>
+      <NameColumnWidth column_width="276"></NameColumnWidth>
+      <ValueColumnWidth column_width="108"></ValueColumnWidth>
+   </column_width_setting>
+   <WVObjectSize size="3" />
+   <wvobject fp_name="group2053" type="group">
+      <obj_property name="label">Test Bench</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="isExpanded"></obj_property>
+      <wvobject fp_name="/RoundTripTestBench/clock" type="logic">
+         <obj_property name="ElementShortName">clock</obj_property>
+         <obj_property name="ObjectShortName">clock</obj_property>
+      </wvobject>
+      <wvobject fp_name="/RoundTripTestBench/reset" type="logic">
+         <obj_property name="ElementShortName">reset</obj_property>
+         <obj_property name="ObjectShortName">reset</obj_property>
+      </wvobject>
+      <wvobject fp_name="/RoundTripTestBench/uartInData" type="logic">
+         <obj_property name="ElementShortName">uartInData</obj_property>
+         <obj_property name="ObjectShortName">uartInData</obj_property>
+      </wvobject>
+      <wvobject fp_name="/RoundTripTestBench/sendToVpeEn" type="logic">
+         <obj_property name="ElementShortName">sendToVpeEn</obj_property>
+         <obj_property name="ObjectShortName">sendToVpeEn</obj_property>
+      </wvobject>
+      <wvobject fp_name="/RoundTripTestBench/sendToUartEn" type="logic">
+         <obj_property name="ElementShortName">sendToUartEn</obj_property>
+         <obj_property name="ObjectShortName">sendToUartEn</obj_property>
+      </wvobject>
+      <wvobject fp_name="/RoundTripTestBench/vpeSerial" type="logic">
+         <obj_property name="ElementShortName">vpeSerial</obj_property>
+         <obj_property name="ObjectShortName">vpeSerial</obj_property>
+      </wvobject>
+      <wvobject fp_name="/RoundTripTestBench/dataIn" type="array">
+         <obj_property name="ElementShortName">dataIn[7:0]</obj_property>
+         <obj_property name="ObjectShortName">dataIn[7:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/RoundTripTestBench/txEn" type="logic">
+         <obj_property name="ElementShortName">txEn</obj_property>
+         <obj_property name="ObjectShortName">txEn</obj_property>
+      </wvobject>
+      <wvobject fp_name="/RoundTripTestBench/txComplete" type="logic">
+         <obj_property name="ElementShortName">txComplete</obj_property>
+         <obj_property name="ObjectShortName">txComplete</obj_property>
+      </wvobject>
+      <wvobject fp_name="/RoundTripTestBench/uartOutData" type="logic">
+         <obj_property name="ElementShortName">uartOutData</obj_property>
+         <obj_property name="ObjectShortName">uartOutData</obj_property>
+      </wvobject>
+      <wvobject fp_name="/RoundTripTestBench/dataOut" type="array">
+         <obj_property name="ElementShortName">dataOut[7:0]</obj_property>
+         <obj_property name="ObjectShortName">dataOut[7:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/RoundTripTestBench/dataReady" type="logic">
+         <obj_property name="ElementShortName">dataReady</obj_property>
+         <obj_property name="ObjectShortName">dataReady</obj_property>
+      </wvobject>
+      <wvobject fp_name="/RoundTripTestBench/ACTIVE" type="logic">
+         <obj_property name="ElementShortName">ACTIVE</obj_property>
+         <obj_property name="ObjectShortName">ACTIVE</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject fp_name="group2052" type="group">
+      <obj_property name="label">RX</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <wvobject fp_name="/RoundTripTestBench/TRANSCEIVER/RX/clock" type="logic">
+         <obj_property name="ElementShortName">clock</obj_property>
+         <obj_property name="ObjectShortName">clock</obj_property>
+      </wvobject>
+      <wvobject fp_name="/RoundTripTestBench/TRANSCEIVER/RX/reset" type="logic">
+         <obj_property name="ElementShortName">reset</obj_property>
+         <obj_property name="ObjectShortName">reset</obj_property>
+      </wvobject>
+      <wvobject fp_name="/RoundTripTestBench/TRANSCEIVER/RX/vpeRxLine" type="logic">
+         <obj_property name="ElementShortName">vpeRxLine</obj_property>
+         <obj_property name="ObjectShortName">vpeRxLine</obj_property>
+      </wvobject>
+      <wvobject fp_name="/RoundTripTestBench/TRANSCEIVER/RX/sendToUartEn" type="logic">
+         <obj_property name="ElementShortName">sendToUartEn</obj_property>
+         <obj_property name="ObjectShortName">sendToUartEn</obj_property>
+      </wvobject>
+      <wvobject fp_name="/RoundTripTestBench/TRANSCEIVER/RX/data" type="array">
+         <obj_property name="ElementShortName">data[7:0]</obj_property>
+         <obj_property name="ObjectShortName">data[7:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/RoundTripTestBench/TRANSCEIVER/RX/address" type="other">
+         <obj_property name="ElementShortName">address</obj_property>
+         <obj_property name="ObjectShortName">address</obj_property>
+      </wvobject>
+      <wvobject fp_name="/RoundTripTestBench/TRANSCEIVER/RX/uartTxLine" type="logic">
+         <obj_property name="ElementShortName">uartTxLine</obj_property>
+         <obj_property name="ObjectShortName">uartTxLine</obj_property>
+      </wvobject>
+      <wvobject fp_name="/RoundTripTestBench/TRANSCEIVER/RX/writeEn" type="logic">
+         <obj_property name="ElementShortName">writeEn</obj_property>
+         <obj_property name="ObjectShortName">writeEn</obj_property>
+      </wvobject>
+      <wvobject fp_name="/RoundTripTestBench/TRANSCEIVER/RX/sevenSegmentHex" type="array">
+         <obj_property name="ElementShortName">sevenSegmentHex[15:0]</obj_property>
+         <obj_property name="ObjectShortName">sevenSegmentHex[15:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/RoundTripTestBench/TRANSCEIVER/RX/writeData" type="array">
+         <obj_property name="ElementShortName">writeData[7:0]</obj_property>
+         <obj_property name="ObjectShortName">writeData[7:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/RoundTripTestBench/TRANSCEIVER/RX/vpeDataUnlatched" type="array">
+         <obj_property name="ElementShortName">vpeDataUnlatched[7:0]</obj_property>
+         <obj_property name="ObjectShortName">vpeDataUnlatched[7:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/RoundTripTestBench/TRANSCEIVER/RX/newDataEn" type="logic">
+         <obj_property name="ElementShortName">newDataEn</obj_property>
+         <obj_property name="ObjectShortName">newDataEn</obj_property>
+      </wvobject>
+      <wvobject fp_name="/RoundTripTestBench/TRANSCEIVER/RX/frameEndEn" type="logic">
+         <obj_property name="ElementShortName">frameEndEn</obj_property>
+         <obj_property name="ObjectShortName">frameEndEn</obj_property>
+      </wvobject>
+      <wvobject fp_name="/RoundTripTestBench/TRANSCEIVER/RX/vpeData" type="array">
+         <obj_property name="ElementShortName">vpeData[7:0]</obj_property>
+         <obj_property name="ObjectShortName">vpeData[7:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/RoundTripTestBench/TRANSCEIVER/RX/state" type="other">
+         <obj_property name="ElementShortName">state</obj_property>
+         <obj_property name="ObjectShortName">state</obj_property>
+      </wvobject>
+      <wvobject fp_name="/RoundTripTestBench/TRANSCEIVER/RX/shiftInTimebaseEn" type="logic">
+         <obj_property name="ElementShortName">shiftInTimebaseEn</obj_property>
+         <obj_property name="ObjectShortName">shiftInTimebaseEn</obj_property>
+      </wvobject>
+      <wvobject fp_name="/RoundTripTestBench/TRANSCEIVER/RX/loadTimebaseLengthEn" type="logic">
+         <obj_property name="ElementShortName">loadTimebaseLengthEn</obj_property>
+         <obj_property name="ObjectShortName">loadTimebaseLengthEn</obj_property>
+      </wvobject>
+      <wvobject fp_name="/RoundTripTestBench/TRANSCEIVER/RX/timebaseNs" type="other">
+         <obj_property name="ElementShortName">timebaseNs</obj_property>
+         <obj_property name="ObjectShortName">timebaseNs</obj_property>
+      </wvobject>
+      <wvobject fp_name="/RoundTripTestBench/TRANSCEIVER/RX/timebaseLoadedMode" type="logic">
+         <obj_property name="ElementShortName">timebaseLoadedMode</obj_property>
+         <obj_property name="ObjectShortName">timebaseLoadedMode</obj_property>
+      </wvobject>
+      <wvobject fp_name="/RoundTripTestBench/TRANSCEIVER/RX/shiftInCountEn" type="logic">
+         <obj_property name="ElementShortName">shiftInCountEn</obj_property>
+         <obj_property name="ObjectShortName">shiftInCountEn</obj_property>
+      </wvobject>
+      <wvobject fp_name="/RoundTripTestBench/TRANSCEIVER/RX/loadCountLengthEn" type="logic">
+         <obj_property name="ElementShortName">loadCountLengthEn</obj_property>
+         <obj_property name="ObjectShortName">loadCountLengthEn</obj_property>
+      </wvobject>
+      <wvobject fp_name="/RoundTripTestBench/TRANSCEIVER/RX/count" type="other">
+         <obj_property name="ElementShortName">count</obj_property>
+         <obj_property name="ObjectShortName">count</obj_property>
+      </wvobject>
+      <wvobject fp_name="/RoundTripTestBench/TRANSCEIVER/RX/countLoadedMode" type="logic">
+         <obj_property name="ElementShortName">countLoadedMode</obj_property>
+         <obj_property name="ObjectShortName">countLoadedMode</obj_property>
+      </wvobject>
+      <wvobject fp_name="/RoundTripTestBench/TRANSCEIVER/RX/addressClearEn" type="logic">
+         <obj_property name="ElementShortName">addressClearEn</obj_property>
+         <obj_property name="ObjectShortName">addressClearEn</obj_property>
+      </wvobject>
+      <wvobject fp_name="/RoundTripTestBench/TRANSCEIVER/RX/addressIncrementEn" type="logic">
+         <obj_property name="ElementShortName">addressIncrementEn</obj_property>
+         <obj_property name="ObjectShortName">addressIncrementEn</obj_property>
+      </wvobject>
+      <wvobject fp_name="/RoundTripTestBench/TRANSCEIVER/RX/addressTerminalMode" type="logic">
+         <obj_property name="ElementShortName">addressTerminalMode</obj_property>
+         <obj_property name="ObjectShortName">addressTerminalMode</obj_property>
+      </wvobject>
+      <wvobject fp_name="/RoundTripTestBench/TRANSCEIVER/RX/timerStartEn" type="logic">
+         <obj_property name="ElementShortName">timerStartEn</obj_property>
+         <obj_property name="ObjectShortName">timerStartEn</obj_property>
+      </wvobject>
+      <wvobject fp_name="/RoundTripTestBench/TRANSCEIVER/RX/timerEndEn" type="logic">
+         <obj_property name="ElementShortName">timerEndEn</obj_property>
+         <obj_property name="ObjectShortName">timerEndEn</obj_property>
+      </wvobject>
+      <wvobject fp_name="/RoundTripTestBench/TRANSCEIVER/RX/timerCycles" type="array">
+         <obj_property name="ElementShortName">timerCycles[47:0]</obj_property>
+         <obj_property name="ObjectShortName">timerCycles[47:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/RoundTripTestBench/TRANSCEIVER/RX/headerLoadEn" type="logic">
+         <obj_property name="ElementShortName">headerLoadEn</obj_property>
+         <obj_property name="ObjectShortName">headerLoadEn</obj_property>
+      </wvobject>
+      <wvobject fp_name="/RoundTripTestBench/TRANSCEIVER/RX/headerNextEn" type="logic">
+         <obj_property name="ElementShortName">headerNextEn</obj_property>
+         <obj_property name="ObjectShortName">headerNextEn</obj_property>
+      </wvobject>
+      <wvobject fp_name="/RoundTripTestBench/TRANSCEIVER/RX/headerCompleteMode" type="logic">
+         <obj_property name="ElementShortName">headerCompleteMode</obj_property>
+         <obj_property name="ObjectShortName">headerCompleteMode</obj_property>
+      </wvobject>
+      <wvobject fp_name="/RoundTripTestBench/TRANSCEIVER/RX/headerData" type="array">
+         <obj_property name="ElementShortName">headerData[7:0]</obj_property>
+         <obj_property name="ObjectShortName">headerData[7:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/RoundTripTestBench/TRANSCEIVER/RX/readEn" type="logic">
+         <obj_property name="ElementShortName">readEn</obj_property>
+         <obj_property name="ObjectShortName">readEn</obj_property>
+      </wvobject>
+      <wvobject fp_name="/RoundTripTestBench/TRANSCEIVER/RX/readData" type="array">
+         <obj_property name="ElementShortName">readData[7:0]</obj_property>
+         <obj_property name="ObjectShortName">readData[7:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/RoundTripTestBench/TRANSCEIVER/RX/dataSelect" type="logic">
+         <obj_property name="ElementShortName">dataSelect</obj_property>
+         <obj_property name="ObjectShortName">dataSelect</obj_property>
+      </wvobject>
+      <wvobject fp_name="/RoundTripTestBench/TRANSCEIVER/RX/txEn" type="logic">
+         <obj_property name="ElementShortName">txEn</obj_property>
+         <obj_property name="ObjectShortName">txEn</obj_property>
+      </wvobject>
+      <wvobject fp_name="/RoundTripTestBench/TRANSCEIVER/RX/txData" type="array">
+         <obj_property name="ElementShortName">txData[7:0]</obj_property>
+         <obj_property name="ObjectShortName">txData[7:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/RoundTripTestBench/TRANSCEIVER/RX/txComplete" type="logic">
+         <obj_property name="ElementShortName">txComplete</obj_property>
+         <obj_property name="ObjectShortName">txComplete</obj_property>
+      </wvobject>
+      <wvobject fp_name="/RoundTripTestBench/TRANSCEIVER/RX/BUFFER_SIZE" type="other">
+         <obj_property name="ElementShortName">BUFFER_SIZE</obj_property>
+         <obj_property name="ObjectShortName">BUFFER_SIZE</obj_property>
+      </wvobject>
+      <wvobject fp_name="/RoundTripTestBench/TRANSCEIVER/RX/CLOCK_FREQUENCY" type="other">
+         <obj_property name="ElementShortName">CLOCK_FREQUENCY</obj_property>
+         <obj_property name="ObjectShortName">CLOCK_FREQUENCY</obj_property>
+      </wvobject>
+      <wvobject fp_name="/RoundTripTestBench/TRANSCEIVER/RX/ACTIVE" type="logic">
+         <obj_property name="ElementShortName">ACTIVE</obj_property>
+         <obj_property name="ObjectShortName">ACTIVE</obj_property>
+      </wvobject>
+      <wvobject fp_name="/RoundTripTestBench/TRANSCEIVER/RX/DATA_SELECT_HEADER" type="logic">
+         <obj_property name="ElementShortName">DATA_SELECT_HEADER</obj_property>
+         <obj_property name="ObjectShortName">DATA_SELECT_HEADER</obj_property>
+      </wvobject>
+      <wvobject fp_name="/RoundTripTestBench/TRANSCEIVER/RX/DATA_SELECT_READ" type="logic">
+         <obj_property name="ElementShortName">DATA_SELECT_READ</obj_property>
+         <obj_property name="ObjectShortName">DATA_SELECT_READ</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject fp_name="group2099" type="group">
+      <obj_property name="label">TX</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <wvobject fp_name="/RoundTripTestBench/TRANSCEIVER/TX/clock" type="logic">
+         <obj_property name="ElementShortName">clock</obj_property>
+         <obj_property name="ObjectShortName">clock</obj_property>
+      </wvobject>
+      <wvobject fp_name="/RoundTripTestBench/TRANSCEIVER/TX/reset" type="logic">
+         <obj_property name="ElementShortName">reset</obj_property>
+         <obj_property name="ObjectShortName">reset</obj_property>
+      </wvobject>
+      <wvobject fp_name="/RoundTripTestBench/TRANSCEIVER/TX/uartRxLine" type="logic">
+         <obj_property name="ElementShortName">uartRxLine</obj_property>
+         <obj_property name="ObjectShortName">uartRxLine</obj_property>
+      </wvobject>
+      <wvobject fp_name="/RoundTripTestBench/TRANSCEIVER/TX/sendToVpeEn" type="logic">
+         <obj_property name="ElementShortName">sendToVpeEn</obj_property>
+         <obj_property name="ObjectShortName">sendToVpeEn</obj_property>
+      </wvobject>
+      <wvobject fp_name="/RoundTripTestBench/TRANSCEIVER/TX/data" type="array">
+         <obj_property name="ElementShortName">data[7:0]</obj_property>
+         <obj_property name="ObjectShortName">data[7:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/RoundTripTestBench/TRANSCEIVER/TX/address" type="other">
+         <obj_property name="ElementShortName">address</obj_property>
+         <obj_property name="ObjectShortName">address</obj_property>
+      </wvobject>
+      <wvobject fp_name="/RoundTripTestBench/TRANSCEIVER/TX/vpeTxLine" type="logic">
+         <obj_property name="ElementShortName">vpeTxLine</obj_property>
+         <obj_property name="ObjectShortName">vpeTxLine</obj_property>
+      </wvobject>
+      <wvobject fp_name="/RoundTripTestBench/TRANSCEIVER/TX/writeEn" type="logic">
+         <obj_property name="ElementShortName">writeEn</obj_property>
+         <obj_property name="ObjectShortName">writeEn</obj_property>
+      </wvobject>
+      <wvobject fp_name="/RoundTripTestBench/TRANSCEIVER/TX/writeData" type="array">
+         <obj_property name="ElementShortName">writeData[7:0]</obj_property>
+         <obj_property name="ObjectShortName">writeData[7:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/RoundTripTestBench/TRANSCEIVER/TX/sevenSegmentHex" type="array">
+         <obj_property name="ElementShortName">sevenSegmentHex[15:0]</obj_property>
+         <obj_property name="ObjectShortName">sevenSegmentHex[15:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/RoundTripTestBench/TRANSCEIVER/TX/dataReady" type="logic">
+         <obj_property name="ElementShortName">dataReady</obj_property>
+         <obj_property name="ObjectShortName">dataReady</obj_property>
+      </wvobject>
+      <wvobject fp_name="/RoundTripTestBench/TRANSCEIVER/TX/uartData" type="array">
+         <obj_property name="ElementShortName">uartData[7:0]</obj_property>
+         <obj_property name="ObjectShortName">uartData[7:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/RoundTripTestBench/TRANSCEIVER/TX/state" type="other">
+         <obj_property name="ElementShortName">state</obj_property>
+         <obj_property name="ObjectShortName">state</obj_property>
+      </wvobject>
+      <wvobject fp_name="/RoundTripTestBench/TRANSCEIVER/TX/shiftInTimebaseEn" type="logic">
+         <obj_property name="ElementShortName">shiftInTimebaseEn</obj_property>
+         <obj_property name="ObjectShortName">shiftInTimebaseEn</obj_property>
+      </wvobject>
+      <wvobject fp_name="/RoundTripTestBench/TRANSCEIVER/TX/loadTimebaseLengthEn" type="logic">
+         <obj_property name="ElementShortName">loadTimebaseLengthEn</obj_property>
+         <obj_property name="ObjectShortName">loadTimebaseLengthEn</obj_property>
+      </wvobject>
+      <wvobject fp_name="/RoundTripTestBench/TRANSCEIVER/TX/timebaseNs" type="other">
+         <obj_property name="ElementShortName">timebaseNs</obj_property>
+         <obj_property name="ObjectShortName">timebaseNs</obj_property>
+      </wvobject>
+      <wvobject fp_name="/RoundTripTestBench/TRANSCEIVER/TX/timebaseLoadedMode" type="logic">
+         <obj_property name="ElementShortName">timebaseLoadedMode</obj_property>
+         <obj_property name="ObjectShortName">timebaseLoadedMode</obj_property>
+      </wvobject>
+      <wvobject fp_name="/RoundTripTestBench/TRANSCEIVER/TX/shiftInCountEn" type="logic">
+         <obj_property name="ElementShortName">shiftInCountEn</obj_property>
+         <obj_property name="ObjectShortName">shiftInCountEn</obj_property>
+      </wvobject>
+      <wvobject fp_name="/RoundTripTestBench/TRANSCEIVER/TX/loadCountLengthEn" type="logic">
+         <obj_property name="ElementShortName">loadCountLengthEn</obj_property>
+         <obj_property name="ObjectShortName">loadCountLengthEn</obj_property>
+      </wvobject>
+      <wvobject fp_name="/RoundTripTestBench/TRANSCEIVER/TX/count" type="other">
+         <obj_property name="ElementShortName">count</obj_property>
+         <obj_property name="ObjectShortName">count</obj_property>
+      </wvobject>
+      <wvobject fp_name="/RoundTripTestBench/TRANSCEIVER/TX/countLoadedMode" type="logic">
+         <obj_property name="ElementShortName">countLoadedMode</obj_property>
+         <obj_property name="ObjectShortName">countLoadedMode</obj_property>
+      </wvobject>
+      <wvobject fp_name="/RoundTripTestBench/TRANSCEIVER/TX/addressClearEn" type="logic">
+         <obj_property name="ElementShortName">addressClearEn</obj_property>
+         <obj_property name="ObjectShortName">addressClearEn</obj_property>
+      </wvobject>
+      <wvobject fp_name="/RoundTripTestBench/TRANSCEIVER/TX/addressIncrementEn" type="logic">
+         <obj_property name="ElementShortName">addressIncrementEn</obj_property>
+         <obj_property name="ObjectShortName">addressIncrementEn</obj_property>
+      </wvobject>
+      <wvobject fp_name="/RoundTripTestBench/TRANSCEIVER/TX/addressTerminalMode" type="logic">
+         <obj_property name="ElementShortName">addressTerminalMode</obj_property>
+         <obj_property name="ObjectShortName">addressTerminalMode</obj_property>
+      </wvobject>
+      <wvobject fp_name="/RoundTripTestBench/TRANSCEIVER/TX/loadDataTimebaseEn" type="logic">
+         <obj_property name="ElementShortName">loadDataTimebaseEn</obj_property>
+         <obj_property name="ObjectShortName">loadDataTimebaseEn</obj_property>
+      </wvobject>
+      <wvobject fp_name="/RoundTripTestBench/TRANSCEIVER/TX/loadHeaderTimebaseEn" type="logic">
+         <obj_property name="ElementShortName">loadHeaderTimebaseEn</obj_property>
+         <obj_property name="ObjectShortName">loadHeaderTimebaseEn</obj_property>
+      </wvobject>
+      <wvobject fp_name="/RoundTripTestBench/TRANSCEIVER/TX/t0En" type="logic">
+         <obj_property name="ElementShortName">t0En</obj_property>
+         <obj_property name="ObjectShortName">t0En</obj_property>
+      </wvobject>
+      <wvobject fp_name="/RoundTripTestBench/TRANSCEIVER/TX/headerLoadEn" type="logic">
+         <obj_property name="ElementShortName">headerLoadEn</obj_property>
+         <obj_property name="ObjectShortName">headerLoadEn</obj_property>
+      </wvobject>
+      <wvobject fp_name="/RoundTripTestBench/TRANSCEIVER/TX/headerNextEn" type="logic">
+         <obj_property name="ElementShortName">headerNextEn</obj_property>
+         <obj_property name="ObjectShortName">headerNextEn</obj_property>
+      </wvobject>
+      <wvobject fp_name="/RoundTripTestBench/TRANSCEIVER/TX/headerCompleteMode" type="logic">
+         <obj_property name="ElementShortName">headerCompleteMode</obj_property>
+         <obj_property name="ObjectShortName">headerCompleteMode</obj_property>
+      </wvobject>
+      <wvobject fp_name="/RoundTripTestBench/TRANSCEIVER/TX/headerData" type="array">
+         <obj_property name="ElementShortName">headerData[7:0]</obj_property>
+         <obj_property name="ObjectShortName">headerData[7:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/RoundTripTestBench/TRANSCEIVER/TX/readEn" type="logic">
+         <obj_property name="ElementShortName">readEn</obj_property>
+         <obj_property name="ObjectShortName">readEn</obj_property>
+      </wvobject>
+      <wvobject fp_name="/RoundTripTestBench/TRANSCEIVER/TX/readData" type="array">
+         <obj_property name="ElementShortName">readData[7:0]</obj_property>
+         <obj_property name="ObjectShortName">readData[7:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/RoundTripTestBench/TRANSCEIVER/TX/dataSelect" type="logic">
+         <obj_property name="ElementShortName">dataSelect</obj_property>
+         <obj_property name="ObjectShortName">dataSelect</obj_property>
+      </wvobject>
+      <wvobject fp_name="/RoundTripTestBench/TRANSCEIVER/TX/txData" type="array">
+         <obj_property name="ElementShortName">txData[7:0]</obj_property>
+         <obj_property name="ObjectShortName">txData[7:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/RoundTripTestBench/TRANSCEIVER/TX/txMode" type="logic">
+         <obj_property name="ElementShortName">txMode</obj_property>
+         <obj_property name="ObjectShortName">txMode</obj_property>
+      </wvobject>
+      <wvobject fp_name="/RoundTripTestBench/TRANSCEIVER/TX/vpeSerial" type="logic">
+         <obj_property name="ElementShortName">vpeSerial</obj_property>
+         <obj_property name="ObjectShortName">vpeSerial</obj_property>
+      </wvobject>
+      <wvobject fp_name="/RoundTripTestBench/TRANSCEIVER/TX/wordEndEn" type="logic">
+         <obj_property name="ElementShortName">wordEndEn</obj_property>
+         <obj_property name="ObjectShortName">wordEndEn</obj_property>
+      </wvobject>
+      <wvobject fp_name="/RoundTripTestBench/TRANSCEIVER/TX/pulseEndedEn" type="logic">
+         <obj_property name="ElementShortName">pulseEndedEn</obj_property>
+         <obj_property name="ObjectShortName">pulseEndedEn</obj_property>
+      </wvobject>
+      <wvobject fp_name="/RoundTripTestBench/TRANSCEIVER/TX/BUFFER_SIZE" type="other">
+         <obj_property name="ElementShortName">BUFFER_SIZE</obj_property>
+         <obj_property name="ObjectShortName">BUFFER_SIZE</obj_property>
+      </wvobject>
+      <wvobject fp_name="/RoundTripTestBench/TRANSCEIVER/TX/CLOCK_FREQUENCY" type="other">
+         <obj_property name="ElementShortName">CLOCK_FREQUENCY</obj_property>
+         <obj_property name="ObjectShortName">CLOCK_FREQUENCY</obj_property>
+      </wvobject>
+      <wvobject fp_name="/RoundTripTestBench/TRANSCEIVER/TX/ACTIVE" type="logic">
+         <obj_property name="ElementShortName">ACTIVE</obj_property>
+         <obj_property name="ObjectShortName">ACTIVE</obj_property>
+      </wvobject>
+      <wvobject fp_name="/RoundTripTestBench/TRANSCEIVER/TX/HEADER_T0_CLOCKS" type="other">
+         <obj_property name="ElementShortName">HEADER_T0_CLOCKS</obj_property>
+         <obj_property name="ObjectShortName">HEADER_T0_CLOCKS</obj_property>
+      </wvobject>
+      <wvobject fp_name="/RoundTripTestBench/TRANSCEIVER/TX/DATA_SELECT_HEADER" type="logic">
+         <obj_property name="ElementShortName">DATA_SELECT_HEADER</obj_property>
+         <obj_property name="ObjectShortName">DATA_SELECT_HEADER</obj_property>
+      </wvobject>
+      <wvobject fp_name="/RoundTripTestBench/TRANSCEIVER/TX/DATA_SELECT_READ" type="logic">
+         <obj_property name="ElementShortName">DATA_SELECT_READ</obj_property>
+         <obj_property name="ObjectShortName">DATA_SELECT_READ</obj_property>
+      </wvobject>
+   </wvobject>
+</wave_config>
