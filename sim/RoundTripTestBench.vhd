@@ -1,41 +1,26 @@
-----------------------------------------------------------------------------------
--- Company: 
--- Engineer: 
--- 
+--------------------------------------------------------------------------------
+-- Author: Lexi Allen
 -- Create Date: 11/16/2024 05:02:06 PM
--- Design Name: 
--- Module Name: RoundTripTestBench - Behavioral
--- Project Name: 
--- Target Devices: 
--- Tool Versions: 
--- Description: 
--- 
--- Dependencies: 
--- 
--- Revision:
--- Revision 0.01 - File Created
--- Additional Comments:
--- 
-----------------------------------------------------------------------------------
+-- Design Name: VPE Serial Interface
+-- Module Name: RoundTripTestBench - TestBench
+-- Description:
+--  Tests the UART -> VPE -> UART capabilities of the UART <-> VPE transceiver
+--------------------------------------------------------------------------------
 
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
--- Uncomment the following library declaration if using
--- arithmetic functions with Signed or Unsigned values
 use IEEE.NUMERIC_STD.ALL;
 
--- Uncomment the following library declaration if instantiating
--- any Xilinx leaf cells in this code.
---library UNISIM;
---use UNISIM.VComponents.all;
-
 entity RoundTripTestBench is
---  Port ( );
 end RoundTripTestBench;
 
 architecture TestBench of RoundTripTestBench is
+
+    -- COMPONENTS
+
+    -- The UART <-> VPE transceiver we are testing
     component TransceiverController is
         generic (
             BUFFER_SIZE: integer := 200000;
@@ -53,6 +38,7 @@ architecture TestBench of RoundTripTestBench is
                sevenSegmentHexRx : out STD_LOGIC_VECTOR (15 downto 0));
     end component;
 
+    -- A UART receiver to read the UART output from the Transceiver
     component UartRx is
         generic(
             BAUD_RATE: positive  := 115200;
@@ -67,6 +53,7 @@ architecture TestBench of RoundTripTestBench is
             );
     end component;
 
+    -- A UART transmitter to feed data into the transceiver
     component UartTx is  
     generic(
         BAUD_RATE: positive  := 115200;
@@ -257,6 +244,9 @@ architecture TestBench of RoundTripTestBench is
         wait for (timebase * count) * 100ns;
     end procedure;
 begin
+    
+    -- [CLOCK RESET]
+    -- Generates a 5 ns reset pulse, then a 10 ns period clock
     CLOCK_RESET: process
     begin
         reset <= ACTIVE;
@@ -268,7 +258,9 @@ begin
             clock <= not clock;
         end loop;
     end process;
-    
+
+    -- [TRANSCEIVER]
+    -- This is the transceiver that we are testing
     TRANSCEIVER: TransceiverController generic map(
         BUFFER_SIZE => 16384,
         SEPARATE_BUFFERS => true
@@ -283,6 +275,9 @@ begin
         uartTx => uartOutData
     );
     
+    -- [TRANSMITTER]
+    -- This is the UART transmitter that will generate the UART signals for
+    -- tests
     TRANSMITTER: UartTx port map(
         clock => clock,
         reset => reset,
@@ -292,6 +287,9 @@ begin
         dataOut => uartInData
     );
     
+    -- [RECEIVER]
+    -- This is the UART receiver that will be used to log the UART sent by the
+    -- transceiver
     RECEIVER: UartRx port map(
         clock => clock,
         reset => reset,
@@ -299,13 +297,24 @@ begin
         dataReady => dataReady,
         dataOut => dataOut
     );
-    
+    -- [DRIVE RECEIVER]
+    -- This sends a UART signal to test the transceiver, tells it to send the
+    -- value over VPE, then send the received VPE signal over UART again
     DRIVE_TRANSMITTER: process
         constant MICROSECOND: integer := 1000;
     begin
         sendToVpeEn <= not ACTIVE;
         sendToUartEn <= not ACTIVE;
-        send_data(MICROSECOND, 255, clock, txComplete, dataIn, sendToVpeEn, txEn);
+        -- Send a signal with 255 values and a timebase of 1us
+        send_data(
+            MICROSECOND, 
+            255, 
+            clock, 
+            txComplete, 
+            dataIn,
+            sendToVpeEn, 
+            txEn
+        );
         wait for 1000 ns;
         wait until rising_edge(clock);
         sendToUartEn <= ACTIVE;
@@ -316,7 +325,8 @@ begin
         end loop;
     end process;
 
-    
+    -- [REPORT DATA]
+    -- This reports the data being received over UART
     REPORT_DATA: process
     begin
         wait until rising_edge(clock);

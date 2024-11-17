@@ -1,10 +1,10 @@
-----------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 -- Author: Lexi Allen
 -- Create Date: 09/08/2024 10:05:56 AM
 -- Design Name: Time Input Based VPE Transmitter
 -- Module Name: TimeBasedVpeTx - Simulation
 -- Description: Implements a simulation-only based VPE transmitter
-----------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 
 
 library IEEE;
@@ -16,25 +16,23 @@ entity TimeBasedVpeTx is
 	   NIBBLES: integer := 8
 	);
 	Port (
-    	t0Time : in time;                       	-- Defines the time base of the VPE signal
-    	data : in std_logic_vector(
+    	t0Time : in time;           -- Defines the time base of the VPE signal
+    	data : in std_logic_vector( -- This is the current word being sent
     	   NIBBLES*4-1 downto 0
-    	);	                                        -- This is the current word being sent
-    	txMode : in std_logic;                  	-- When this gets flipped high, a transmission
-                                                	-- starts being sent
-    	vpeSerial : out std_logic;              	-- The signal that the transmission is being
-                                                	-- sent along
-    	wordEndEn : out std_logic               	-- This turns high at the beginning of the
-                                                	-- ultimate pulse of a word being set, when it
-                                                	-- goes high,
-                                                	-- you can deassert the txmode until it goes
-                                                	-- low to stop the frame, or keep it asserted
-                                                	-- to
-                                                	-- continue the frame, if you deassert txmode,
-                                                	-- you can reassert it right after wordEndEn
-                                                	-- goes low
-                                                	-- to immediately send a frame after the
-                                                	-- current one
+    	);	                        
+    	txMode : in std_logic;      -- When this gets flipped high, a 
+                                    -- transmission starts being sent
+    	vpeSerial : out std_logic;  -- The signal that the transmission is being
+                                    -- sent along
+    	wordEndEn : out std_logic   -- This turns high at the beginning of the
+                                    -- ultimate pulse of a word being set, when
+                                    -- it goes high, you can deassert the txmode
+                                    -- until it goes low to stop the frame, or
+                                    -- keep it asserted to continue the frame,
+                                    -- if you deassert txmode, you can reassert
+                                    -- it right after wordEndEn goes low to
+                                    -- immediately send a frame after the
+                                    -- current one
 	);
 end TimeBasedVpeTx;
 
@@ -178,14 +176,18 @@ architecture Simulation of TimeBasedVpeTx is
 	end function;
     
 	-- A helper function for getting a nibble from a word
-	function getNibbleAtIndex(word: std_logic_vector(NIBBLES*4 - 1 downto 0); index: integer range 0 to NIBBLES-1) return std_logic_vector is
+	function getNibbleAtIndex(
+		word: std_logic_vector(NIBBLES*4 - 1 downto 0);
+		index: integer range 0 to NIBBLES-1
+	) return std_logic_vector is
 	begin
     	return word(index*4 + 3 downto index*4);
 	end function;
     
     
 	-- Gets where we want to start the word if we want to avoid leading zeros
-	function getWordBeginPointer(word: std_logic_vector(NIBBLES*4 - 1 downto 0)) return integer is
+	function getWordBeginPointer(word: std_logic_vector(NIBBLES*4 - 1 downto 0)) 
+	return integer is
 	begin
     	for index in NIBBLES - 1 downto 0 loop
         	if (getNibbleAtIndex(word,index) /= "0000") then
@@ -215,17 +217,20 @@ begin
 
 	-- Controls the sequence of pulses to be sent
 	CONTROL_PULSES: process
-    	variable currentData : std_logic_vector(NIBBLES*4-1 downto 0) := (others => '0');
+    	variable currentData : std_logic_vector(NIBBLES*4-1 downto 0) := 
+			(others => '0');
     	variable dataPointer : integer range 0 to NIBBLES := 0;
 	begin
     	-- Let's make sure wordEndEn is inactive before we do anything
     	wordEndEn <= not ACTIVE;
-    	-- to start off with, we want to wait until txMode activates as we are idling at this point
+    	-- to start off with, we want to wait until txMode activates as we are
+		-- idling at this point
     	wait until txMode = ACTIVE;
     	-- After thats done, we load the start frame of the frame we are sending
     	currentData := data;
     	dataPointer := getWordBeginPointer(data);
-    	-- then we want to make sure the last pulse has already ended before starting the frame off
+    	-- then we want to make sure the last pulse has already ended before
+		-- starting the frame off
     	if (pulseEnd /= ACTIVE) then
         	wait until pulseEnd = ACTIVE;
     	end if;
@@ -247,8 +252,8 @@ begin
             	loadNewPulse <= ACTIVE;
             	wait for t0Time;
             	loadNewPulse <= not ACTIVE;
-            	-- Then after the load is completed t0Time has elapsed, and we check if txMode is
-            	-- still active
+            	-- Then after the load is completed t0Time has elapsed, and we
+            	-- check if txMode is still active
             	if (txMode = not ACTIVE) then
                 	-- if not, we finish the frame
                 	wordEndEn <= not ACTIVE;
@@ -258,7 +263,8 @@ begin
                 	wordEndEn <= not ACTIVE;
                 	dataPointer := 0;
             	end if;
-        	-- if instead we finished the ultimate pulse, and are continuing the frame
+        	-- if instead we finished the ultimate pulse, and are continuing the
+			-- frame
         	elsif (dataPointer = 0) then
             	-- we load the next word
             	currentData := data;
@@ -271,7 +277,9 @@ begin
         	else
             	-- In all other cases, we send the next nibble
             	dataPointer := dataPointer - 1;
-            	pulseToLoad <= nibbleToPulse(getNibbleAtIndex(data,dataPointer));
+            	pulseToLoad <= nibbleToPulse(
+					getNibbleAtIndex(data,dataPointer)
+				);
             	loadNewPulse <= ACTIVE;
             	wait for t0Time;
             	loadNewPulse <= not ACTIVE;

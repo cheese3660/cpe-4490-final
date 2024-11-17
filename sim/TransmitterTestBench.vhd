@@ -1,43 +1,26 @@
-----------------------------------------------------------------------------------
--- Company: 
--- Engineer: 
--- 
+--------------------------------------------------------------------------------
+-- Author: Lexi Allen
 -- Create Date: 11/16/2024 07:04:29 AM
--- Design Name: 
+-- Design Name: VPE Serial Interface
 -- Module Name: TransmitterTestBench - TestBench
--- Project Name: 
--- Target Devices: 
--- Tool Versions: 
--- Description: 
 -- 
--- Dependencies: 
--- 
--- Revision:
--- Revision 0.01 - File Created
--- Additional Comments:
--- 
-----------------------------------------------------------------------------------
+-- Dependencies: Tests the UART -> VPE portion of the UART <-> VPE transceiver
+--------------------------------------------------------------------------------
 
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
--- Uncomment the following library declaration if using
--- arithmetic functions with Signed or Unsigned values
 use IEEE.NUMERIC_STD.ALL;
 
--- Uncomment the following library declaration if instantiating
--- any Xilinx leaf cells in this code.
---library UNISIM;
---use UNISIM.VComponents.all;
-
 entity TransmitterTestBench is
---  Port ( );
 end TransmitterTestBench;
 
 architecture TestBench of TransmitterTestBench is
 
+    -- COMPONENTS
     
+    -- The UART <-> VPE transceiver we are testing
     component TransceiverController is
         generic (
             BUFFER_SIZE: integer := 200000;
@@ -55,6 +38,8 @@ architecture TestBench of TransmitterTestBench is
                sevenSegmentHexRx : out STD_LOGIC_VECTOR (15 downto 0));
     end component;
     
+    -- A VPE Receiver used to log the data being sent over VPE by the
+    -- transceiver
     component VpeRx is
         Generic (
             -- The width of data you wish to receive
@@ -73,6 +58,7 @@ architecture TestBench of TransmitterTestBench is
                endFrameEn : out STD_LOGIC);
     end component;
     
+    -- A UART transmitter to feed data into the transceiver
     component UartTx is  
         generic(
             BAUD_RATE: positive  := 115200;
@@ -267,6 +253,8 @@ architecture TestBench of TransmitterTestBench is
         
     end procedure;
 begin
+    -- [CLOCK RESET]
+    -- Generates a 5 ns reset pulse, then a 10 ns period clock
     CLOCK_RESET: process
     begin
         reset <= ACTIVE;
@@ -279,6 +267,8 @@ begin
         end loop;
     end process;
     
+    -- [TRANSCEIVER]
+    -- This is the transceiver that we are testing
     TRANSCEIVER: TransceiverController generic map(
         BUFFER_SIZE => 16384,
         SEPARATE_BUFFERS => true
@@ -293,6 +283,10 @@ begin
         -- sevenSegmentHex => hexDebug
     );
     
+    
+    -- [TRANSMITTER]
+    -- This is the UART transmitter that will generate the UART signals for
+    -- testing the UART -> VPE portion of the transceiver
     TRANSMITTER: UartTx port map(
         clock => clock,
         reset => reset,
@@ -302,6 +296,9 @@ begin
         dataOut => uartRx
     );
     
+    -- [RECEIVER]
+    -- This is the VPE receiver that will be used to log the VPE sent by the
+    -- transceiver
     RECEIVER: VpeRx generic map(
         DATA_WIDTH => 8
     ) port map(
@@ -313,20 +310,66 @@ begin
         endFrameEn => frameEndEn
     );
     
+    -- [DRIVE RECEIVER]
+    -- This sends a set of UART signals to test the UART -> VPE portion of the
+    -- transceiver
+    --
+    -- After each send, it tells the transceiver tells the transceiver to output
+    -- the VPE
     DRIVE_TRANSMITTER: process
         constant MICROSECOND: integer := 1000;
     begin
         sendToVpeEn <= not ACTIVE;
-        send_data(100 * MICROSECOND, 10, clock, reset, txComplete, frameEndEn, dataIn, sendToVpeEn, txEn);
+        
+        -- send a signal with 10 values with the data being transmitted at
+        -- t0 = 100us
+        send_data(
+            100 * MICROSECOND,
+            10,
+            clock,
+            reset,
+            txComplete,
+            frameEndEn,
+            dataIn,
+            sendToVpeEn,
+            txEn
+        );
         wait for 1000 ns;
-        send_data(50 * MICROSECOND, 5, clock, reset, txComplete, frameEndEn, dataIn, sendToVpeEn, txEn);
+
+        -- send a signal with 5 values with the data being transmitted at
+        -- t0 = 50us
+        send_data(
+            50 * MICROSECOND,
+            5,
+            clock,
+            reset,
+            txComplete,
+            frameEndEn,
+            dataIn,
+            sendToVpeEn,
+            txEn
+        );
         wait for 1000 ns;
-        send_data(10 * MICROSECOND, 127, clock, reset, txComplete, frameEndEn, dataIn, sendToVpeEn, txEn);
+        -- send a signal with 127 values with the data being transmitted at
+        -- t0 = 10us
+        send_data(
+            10 * MICROSECOND,
+            127,
+            clock,
+            reset,
+            txComplete,
+            frameEndEn,
+            dataIn,
+            sendToVpeEn,
+            txEn
+        );
         loop
             wait for 1sec;
         end loop;
     end process;
     
+    -- [REPORT DATA]
+    -- This reports the data being received over VPE
     REPORT_DATA: process
         variable hasFrameBegun: boolean := false;
     begin

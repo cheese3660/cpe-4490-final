@@ -1,51 +1,36 @@
-----------------------------------------------------------------------------------
--- Company: 
--- Engineer: 
--- 
+--------------------------------------------------------------------------------
+-- Author: Lexi Allen
+--
 -- Create Date: 11/16/2024 10:18:00 AM
--- Design Name: 
+-- Design Name: VPE Serial Interface
 -- Module Name: Debouncer - Procedural
--- Project Name: 
--- Target Devices: 
--- Tool Versions: 
--- Description: 
--- 
--- Dependencies: 
--- 
--- Revision:
--- Revision 0.01 - File Created
--- Additional Comments:
--- 
-----------------------------------------------------------------------------------
-
+-- Description: A simple generic signal debouncer
+--------------------------------------------------------------------------------
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
--- Uncomment the following library declaration if using
--- arithmetic functions with Signed or Unsigned values
---use IEEE.NUMERIC_STD.ALL;
-
--- Uncomment the following library declaration if instantiating
--- any Xilinx leaf cells in this code.
---library UNISIM;
---use UNISIM.VComponents.all;
-
 entity Debouncer is
     Generic (
-        QUEUE_LENGTH: integer := 16;
-        QUEUE_FILL_AMOUNT: integer := 12
+        QUEUE_LENGTH: integer := 16; -- How many bits should be stored
+        QUEUE_FILL_AMOUNT: integer := 12 -- How many of the stored bits need to
+                                         -- be a certain value to flip
     );
     Port ( clock : in STD_LOGIC;
            reset : in STD_LOGIC;
-           sampleEn : in STD_LOGIC;
-           noisySignal : in STD_LOGIC;
-           debouncedSignal : out STD_LOGIC);
+           sampleEn : in STD_LOGIC; -- Pulse this to trigger a sample
+           noisySignal : in STD_LOGIC; -- This is the signal to debounce
+           debouncedSignal : out STD_LOGIC -- This is the filtered signal
+        );
 end Debouncer;
 
 architecture Procedural of Debouncer is
     constant ACTIVE: std_logic := '1';
 begin
+    -- [DEBOUNCE]
+    -- Reads a bit from noisySignal every time sampleEn is pulsed and checks
+    -- if QUEUE_FILL_AMOUNT bits stored are in one state and then switches the
+    -- output to that state if so
     DEBOUNCE: process(clock, reset) is
         variable queue: std_logic_vector(QUEUE_LENGTH-1 downto 0) := (others => '0');
         variable inactive_count: integer range 0 to QUEUE_LENGTH;

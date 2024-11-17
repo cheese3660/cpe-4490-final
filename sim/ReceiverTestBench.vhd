@@ -1,42 +1,26 @@
-----------------------------------------------------------------------------------
--- Company: 
--- Engineer: 
+--------------------------------------------------------------------------------
+-- Author: Lexi Allen 
 -- 
 -- Create Date: 11/16/2024 02:57:29 PM
--- Design Name: 
+-- Design Name: VPE Serial Interface
 -- Module Name: ReceiverTestBench - Receiver
--- Project Name: 
--- Target Devices: 
--- Tool Versions: 
--- Description: 
--- 
--- Dependencies: 
--- 
--- Revision:
--- Revision 0.01 - File Created
--- Additional Comments:
--- 
-----------------------------------------------------------------------------------
+-- Description: Tests the VPE -> UART portion of the UART <-> VPE transceiver
+--------------------------------------------------------------------------------
 
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
--- Uncomment the following library declaration if using
--- arithmetic functions with Signed or Unsigned values
 use IEEE.NUMERIC_STD.ALL;
 
--- Uncomment the following library declaration if instantiating
--- any Xilinx leaf cells in this code.
---library UNISIM;
---use UNISIM.VComponents.all;
-
 entity ReceiverTestBench is
---  Port ( );
 end ReceiverTestBench;
 
-architecture Receiver of ReceiverTestBench is
+architecture TestBench of ReceiverTestBench is
 
+    -- COMPONENTS
+
+    -- The UART <-> VPE transceiver we are testing
     component TransceiverController is
         generic (
             BUFFER_SIZE: integer := 200000;
@@ -54,35 +38,35 @@ architecture Receiver of ReceiverTestBench is
                sevenSegmentHexRx : out STD_LOGIC_VECTOR (15 downto 0));
     end component;
     
+    -- A simulation only VPE transmitter to feed data into the Transceiver
     component TimeBasedVpeTx is
-    
         Generic (
            NIBBLES: integer := 8
         );
         Port (
-            t0Time : in time;                       	-- Defines the time base of the VPE signal
-            data : in std_logic_vector(
+            t0Time : in time;           -- Defines the time base of the VPE
+                                        -- signal
+            data : in std_logic_vector( -- This is the current word being sent
                NIBBLES*4-1 downto 0
-            );	                                        -- This is the current word being sent
-            txMode : in std_logic;                  	-- When this gets flipped high, a transmission
-                                                        -- starts being sent
-            vpeSerial : out std_logic;              	-- The signal that the transmission is being
-                                                        -- sent along
-            wordEndEn : out std_logic               	-- This turns high at the beginning of the
-                                                        -- ultimate pulse of a word being set, when it
-                                                        -- goes high,
-                                                        -- you can deassert the txmode until it goes
-                                                        -- low to stop the frame, or keep it asserted
-                                                        -- to
-                                                        -- continue the frame, if you deassert txmode,
-                                                        -- you can reassert it right after wordEndEn
-                                                        -- goes low
-                                                        -- to immediately send a frame after the
-                                                        -- current one
+            );
+            txMode : in std_logic;      -- When this gets flipped high, a
+                                        -- transmission starts being sent
+            vpeSerial : out std_logic;  -- The signal that the transmission is
+                                        -- being sent along
+            wordEndEn : out std_logic   -- This turns high at the beginning of
+                                        -- the ultimate pulse of a word being
+                                        -- set, when it goes high, you can
+                                        -- deassert the txmode until it goes low
+                                        -- to stop the frame, or keep it 
+                                        -- asserted to continue the frame, if
+                                        -- you deassert txmode, you can reassert
+                                        -- it right after wordEndEn goes low to
+                                        -- immediately send a frame after the
+                                        -- current one
         );
     end component;
     
-    
+    -- A UART receiver to read the UART output from the Transceiver
     component UartRx is
         generic(
             BAUD_RATE: positive  := 115200;
@@ -166,7 +150,6 @@ architecture Receiver of ReceiverTestBench is
     end function;
     
     -- procedures
-    
     procedure send_data(
         constant timebase: in time;
         constant count: in integer range 1 to 255;
@@ -191,8 +174,7 @@ architecture Receiver of ReceiverTestBench is
         count_vector := std_logic_vector(to_unsigned(count,8));
         
         send_to_uart <= not ACTIVE;
-        
-        -- Send 
+
         tx_timebase <= 100us;
         tx_data <= X"04";
         
@@ -262,6 +244,9 @@ architecture Receiver of ReceiverTestBench is
         
     end procedure;
 begin
+
+    -- [CLOCK RESET]
+    -- Generates a 5 ns reset pulse, then a 10 ns period clock
     CLOCK_RESET: process
     begin
         reset <= ACTIVE;
@@ -274,6 +259,9 @@ begin
         end loop;
     end process;
     
+
+    -- [TRANSCEIVER]
+    -- This is the transceiver that we are testing the VPE -> UART portion of
     TRANSCEIVER: TransceiverController generic map(
         BUFFER_SIZE => 16384,
         SEPARATE_BUFFERS => true
@@ -287,6 +275,8 @@ begin
         uartTx => uartTx
     );
     
+    -- [TRANSMITTER]
+    -- This is the VPE transmitter that will generate the VPE signals for tests
     TRANSMITTER: TimeBasedVpeTx generic map (
         NIBBLES => 2
     ) port map (
@@ -297,6 +287,9 @@ begin
         wordEndEn => wordEndEn
     );
     
+    -- [RECEIVER]
+    -- This is the UART receiver that will be used to log the UART sent by the
+    -- VPE -> UART portion of the transceiver
     RECEIVER: UartRx port map(
         clock => clock,
         reset => reset,
@@ -305,16 +298,60 @@ begin
         dataOut => dataOut
     );
 
+    -- [DRIVE RECEIVER]
+    -- This sends a set of VPE signals to test the VPE -> UART portion of the
+    -- transceiver
+    --
+    -- After each send, it tells the transceiver tells the transceiver to output
+    -- the UART
     DRIVE_RECEIVER: process
     begin
-        send_data(100us, 10, clock, wordEndEn, vpeRx, sendToUartEn, txTimebase, dataIn, txMode);
-        send_data(50us, 5, clock, wordEndEn, vpeRx, sendToUartEn, txTimebase, dataIn, txMode);
-        send_data(10us, 127, clock, wordEndEn, vpeRx, sendToUartEn, txTimebase, dataIn, txMode);
+        -- send a signal with 10 values with the data being transmitted at
+        -- t0 = 100us
+        send_data(
+            100us,
+            10,
+            clock, 
+            wordEndEn, 
+            vpeRx, 
+            sendToUartEn, 
+            txTimebase, 
+            dataIn, 
+            txMode
+        );
+        -- send a signal with 5 values with the data being transmitted at
+        -- t0 = 50us
+        send_data(
+            50us, 
+            5, 
+            clock, 
+            wordEndEn, 
+            vpeRx, 
+            sendToUartEn, 
+            txTimebase, 
+            dataIn, 
+            txMode
+        );
+        -- send a signal with 127 values with the data being transmitted at
+        -- t0 = 10us
+        send_data(
+            10us,
+            127,
+            clock,
+            wordEndEn,
+            vpeRx,
+            sendToUartEn,
+            txTimebase,
+            dataIn,
+            txMode
+        );
         loop
             wait for 1sec;
         end loop;
     end process;
 
+    -- [REPORT DATA]
+    -- This reports the data being received over UART
     REPORT_DATA: process
     begin
         wait until rising_edge(clock);
@@ -322,4 +359,4 @@ begin
             report "WORD: " & get_word(dataOut);
         end if;
     end process;
-end Receiver;
+end TestBench;
