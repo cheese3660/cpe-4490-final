@@ -187,8 +187,8 @@ begin
     end process;
 
     RX_TX: TransceiverController generic map (
-        BUFFER_SIZE => 8192,
-        SEPARATE_BUFFERS => true
+        BUFFER_SIZE => 180_000,
+        SEPARATE_BUFFERS => false
     ) port map (
         clock => clock,
         reset => reset,

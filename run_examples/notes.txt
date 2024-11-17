@@ -1,0 +1,1 @@
+max_speed.png is named as such as it is pushing the denoising filter to its limit of 12 clock cylces (120 ns)

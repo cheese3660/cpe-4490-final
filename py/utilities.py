@@ -141,7 +141,7 @@ if args.subprogram == "list":
     list_ports_subprogram()
 elif args.subprogram == "header":
     send_header_subprogram()
-elif args.subprogram == "file":
+elif args.subprogram == "send":
     send_file_subprogram()
 elif args.subprogram == "repl":
     repl_subprogram()
