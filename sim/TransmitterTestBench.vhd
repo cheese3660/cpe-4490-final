@@ -310,7 +310,7 @@ begin
         endFrameEn => frameEndEn
     );
     
-    -- [DRIVE RECEIVER]
+    -- [DRIVE TRANSMITTER]
     -- This sends a set of UART signals to test the UART -> VPE portion of the
     -- transceiver
     --

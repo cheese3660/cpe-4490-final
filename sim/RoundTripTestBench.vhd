@@ -297,10 +297,10 @@ begin
         dataReady => dataReady,
         dataOut => dataOut
     );
-    -- [DRIVE RECEIVER]
+    -- [DRIVE TRANSCEIVER]
     -- This sends a UART signal to test the transceiver, tells it to send the
     -- value over VPE, then send the received VPE signal over UART again
-    DRIVE_TRANSMITTER: process
+    DRIVE_TRANSCEIVER: process
         constant MICROSECOND: integer := 1000;
     begin
         sendToVpeEn <= not ACTIVE;
